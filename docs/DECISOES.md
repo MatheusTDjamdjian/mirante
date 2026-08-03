@@ -159,6 +159,28 @@ affected` sem base resolvível pode devolver conjunto vazio e passar verde sem
 
 ---
 
+## ADR-011 — Um sistema operacional por checkout, com portão no `pre-push`
+
+- **Contexto.** O primeiro `git push` saiu do WSL sobre `/mnt/c` e o hook quebrou
+  em `TypeError: (0 , native_1.isAiAgent) is not a function`. Duas causas
+  independentes: o Node daquele shell era 24.12.0, fora de `engines`
+  (`^22.22.3 || ^24.15.0`); e só `@nx/nx-win32-x64-msvc` está instalado, porque o
+  `npm install` rodou no Windows — o Nx distribui binário nativo por plataforma.
+- **Opções.** Trabalhar só do Windows; mover o checkout para o sistema de
+  arquivos do Linux e trabalhar só do WSL; manter os dois e conviver com a
+  quebra.
+- **Escolha.** Um sistema por checkout, sem mistura, e um portão
+  (`tools/verificar-ambiente.mjs`) como primeira linha do hook, que confere
+  `engines` contra o Node em uso e a presença do binário nativo do Nx para a
+  plataforma atual. Ele não conserta nada — diz o que está errado, em pt-BR, em
+  vez de deixar o Nx falhar com stack trace que não indica a causa.
+- **Custo aceito.** Uma dependência de desenvolvimento nova (`semver`, para
+  comparar contra o `engines` real em vez de duplicar o intervalo) e um script a
+  mais na frente do hook. Qual sistema usar é decisão do humano, e está pendente.
+- **Data.** 2026-07-31
+
+---
+
 ## ADR-010 — Angular zoneless
 
 - **Contexto.** O Nx 23 gera app Angular sem `zone.js`. O `CONTEXTO.md` fixa

@@ -9,12 +9,16 @@
 
 set -e
 
+# Ambiente antes de tudo: Node fora do engines e node_modules instalado em outro
+# sistema operacional quebram o Nx com stack trace que nao explica nada.
+node tools/verificar-ambiente.mjs
+
 BASE="origin/main"
 
 if git rev-parse --verify --quiet "$BASE" >/dev/null 2>&1; then
   echo "pre-push: verificando projetos afetados em relacao a $BASE"
-  npx nx affected --base="$BASE" -t lint test build
+  npx nx affected --base="$BASE" -t lint test build typecheck
 else
   echo "pre-push: $BASE nao existe ainda; verificando todos os projetos"
-  npx nx run-many -t lint test build
+  npx nx run-many -t lint test build typecheck
 fi
