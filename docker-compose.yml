@@ -1,0 +1,59 @@
+name: mirante
+
+# Infra local de desenvolvimento. Sobe com `npm run dev:infra`.
+# Nenhum valor real de credencial mora aqui: POSTGRES_PASSWORD vem do .env, e a
+# ausencia dela derruba o comando com mensagem explicita em vez de subir um banco
+# com senha default versionada.
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: mirante-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mirante}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env (copie de .env.example)}
+      POSTGRES_DB: ${POSTGRES_DB:-mirante}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      # Roda so na criacao de um volume vazio. Ver docker/postgres/init.
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-mirante} -d ${POSTGRES_DB:-mirante}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: mirante-redis
+    restart: unless-stopped
+    # maxmemory-policy noeviction e exigencia do BullMQ: com eviction, job na fila
+    # pode ser descartado silenciosamente pelo Redis.
+    command:
+      [
+        'redis-server',
+        '--appendonly',
+        'yes',
+        '--maxmemory-policy',
+        'noeviction',
+      ]
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 24
+
+volumes:
+  postgres-data:
+  redis-data:

@@ -1,0 +1,64 @@
+# compiled output
+dist
+tmp
+out-tsc
+
+# dependencies
+node_modules
+
+# segredo: nunca versionar valor real. Ver .env.example
+.env
+.env.*
+!.env.example
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Angular
+.angular
+
+# Nx
+.nx/cache
+.nx/workspace-data
+.nx/polygraph
+.nx/self-healing
+.nx/migrate-runs
+
+# Claude Code
+.claude/worktrees
+.claude/settings.local.json
+
+# artefato temporario do teste de fronteira de modulo
+libs/ui/src/lib/__violacao-fronteira.tmp.ts
+
+vite.config.*.timestamp*
+.angular
+
+vitest.config.*.timestamp*

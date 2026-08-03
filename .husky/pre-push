@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+#
+# Unico portao de qualidade do Mirante.
+#
+# CLAUDE.md secao 1: este projeto nao tem CI e nao tem nada em .github/. Se este
+# hook passar verde sem ter rodado nada, o projeto perde a sua unica rede de
+# protecao — por isso a base de comparacao tem fallback explicito em vez de
+# deixar o `nx affected` resolver um conjunto vazio em silencio.
+
+set -e
+
+BASE="origin/main"
+
+if git rev-parse --verify --quiet "$BASE" >/dev/null 2>&1; then
+  echo "pre-push: verificando projetos afetados em relacao a $BASE"
+  npx nx affected --base="$BASE" -t lint test build
+else
+  echo "pre-push: $BASE nao existe ainda; verificando todos os projetos"
+  npx nx run-many -t lint test build
+fi
