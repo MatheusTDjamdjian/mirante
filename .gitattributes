@@ -1,0 +1,24 @@
+# Fim de linha determinista, independente de core.autocrlf da maquina.
+#
+# Sem isto, o git no Windows converte a arvore de trabalho para CRLF e:
+#   - `prettier --check` reprova o repositorio inteiro, e o sinal morre;
+#   - `.husky/pre-push` quebra sob `sh` no Linux ("bad interpreter");
+#   - o SHA-256 de design/Mirante.dc.html deixa de conferir com o registrado
+#     no DESIGN_SYSTEM.md, que e a unica coisa que aquele documento garante.
+#
+# Os tres aconteceram na Onda 1.
+
+* text=auto eol=lf
+
+# Script de shell precisa de LF em qualquer sistema. O hook do Husky nao tem
+# extensao, entao vai listado.
+*.sh text eol=lf
+.husky/* text eol=lf
+
+# Especificacao de design: byte exato, git nunca converte.
+# O hash registrado no DESIGN_SYSTEM.md secao 1 e o contrato; qualquer conversao
+# de fim de linha o invalida em silencio.
+design/** -text
+
+# Lockfile: gerado por ferramenta, sem merge manual.
+package-lock.json -diff linguist-generated
