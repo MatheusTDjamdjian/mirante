@@ -1,0 +1,20 @@
+# Add files here to ignore them from prettier formatting
+/dist
+/coverage
+/.nx/cache
+/.nx/workspace-data
+.nx/self-healing
+package-lock.json
+
+# Especificacao de design: artefato imutavel, formatar alteraria o hash SHA-256
+/design
+
+# Especificacao do projeto, escrita a mao. O Prettier formata codigo, nao a
+# especificacao — reescrever estes arquivos nao e papel de ferramenta.
+/CLAUDE.md
+/CONTEXTO.md
+/DESIGN_SYSTEM.md
+/PROMPT_ONDAS.md
+/README.md
+
+.angular

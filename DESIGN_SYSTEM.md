@@ -20,13 +20,44 @@ O design do Mirante existe em um único lugar, e este documento não é ele.
 
 | | |
 |---|---|
-| Projeto | Claude Design — Mirante |
+| Projeto | Claude Design — `Mirante: Design system revisado` |
+| `projectId` | `a5cff905-39dc-483a-93af-ac11ab9cbb0a` |
 | Arquivo principal | `Mirante.dc.html` |
 | Arquivo auxiliar | `support.js` |
 | Local no repositório | `design/Mirante.dc.html`, `design/support.js` |
-| Hash SHA-256 do arquivo principal | `PREENCHER` |
-| Data da extração | `PREENCHER` |
-| Extraído por | `PREENCHER` |
+| Hash SHA-256 do arquivo principal | `61a214372cc98c76a9df6c0267039c9d8653d5ea79dcf5ee5b0b3cd617d9b077` |
+| Tamanho do arquivo principal | 164.806 bytes |
+| Hash SHA-256 de `support.js` | `8fe7df74405f3c55f49b7249c74ea1397e65d07dea2b1bd3b4a489bec2e28cbe` |
+| Data da extração | 2026-08-03 |
+| Extraído por | Claude, via MCP `claude_design`, a pedido de Matheus Tasso |
+| Estado do procedimento | **Somente o Passo 1** (artefato fixado). Passos 2 a 6 pendentes — ver banner no topo |
+
+O projeto trazia **dois arquivos além dos dois previstos acima**, também
+versionados em `design/` porque valem pelo mesmo motivo — projeto do Claude
+Design muda debaixo dos pés:
+
+| Arquivo | Local no repositório | O que é |
+|---|---|---|
+| `libs/ui/tokens/mirante.tokens.css` | `design/libs/ui/tokens/mirante.tokens.css` | Tokens semânticos como variáveis CSS, tema escuro em `:root` e claro em `[data-tema='claro']` |
+| `libs/ui/tokens/mirante.preset.js` | `design/libs/ui/tokens/mirante.preset.js` | Preset Tailwind, todo utilitário apontando para `var(--token)` |
+
+Esses dois vieram pelo contexto do agente, não direto para disco, então foram
+conferidos contra o `Mirante.dc.html`: 108 pares token/valor, 77 tokens
+distintos, 76 referenciados pelo preset e todos declarados. Nenhum valor
+divergente. Duas observações da conferência:
+
+- Onze pares diferem do HTML apenas em notação numérica (`.2` no HTML, `0.2` no
+  CSS). Mesmo valor.
+- Movimento reduzido está declarado nos dois arquivos, por mecanismos
+  diferentes: o HTML usa `@media (prefers-reduced-motion:reduce){*{animation-duration:1ms
+  !important;animation-iteration-count:1 !important;transition-duration:1ms
+  !important}}`, e o CSS de tokens sobrescreve `--d-instantaneo`, `--d-rapido`,
+  `--d-medio` e `--d-lento` para `1ms`. Os dois valem; a seção 6 deste documento
+  não precisa da exceção de "implemente e reporte", porque o design declarou.
+
+Fato relevante para a seção 8: o HTML **não** usa `prefers-color-scheme`. A troca
+de tema é por atributo (`data-tema`), junto com `data-densidade`, o que é
+coerente com o `mir-seletor-tema` da seção 9.
 
 **Regra de ouro.** O `Mirante.dc.html` é a especificação. Este documento é
 apenas a tradução dele para tokens consumíveis pelo Tailwind. Em qualquer

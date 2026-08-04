@@ -1,0 +1,136 @@
+/* Mirante — tokens semânticos. Fonte única de verdade para libs/ui.
+   Nenhum componente escreve valor cru: só var(--token). */
+
+:root {
+  /* faces ------------------------------------------------------------ */
+  --f-display: 'Archivo', 'Helvetica Neue', Helvetica, sans-serif;
+  --f-texto: 'IBM Plex Sans', 'Helvetica Neue', Helvetica, sans-serif;
+  --f-numero: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* escala tipográfica ---------------------------------------------- */
+  --t-microrrotulo: 10px;
+  --t-rotulo: 11px;
+  --t-legenda: 12px;
+  --t-corpo: 13px;
+  --t-corpo-forte: 14px;
+  --t-titulo-c: 15px;
+  --t-titulo-b: 17px;
+  --t-titulo-a: 22px;
+  --t-display: 30px;
+  --t-display-grande: 44px;
+
+  --p-regular: 400;
+  --p-medio: 500;
+  --p-forte: 600;
+  --p-display: 700;
+
+  --l-apertada: 1.12;
+  --l-titulo: 1.22;
+  --l-corpo: 1.45;
+
+  --k-display: -0.02em;
+  --k-titulo: -0.01em;
+  --k-rotulo: 0.08em;
+
+  /* espaçamento ----------------------------------------------------- */
+  --e-0: 0px;
+  --e-1: 2px;
+  --e-2: 4px;
+  --e-3: 6px;
+  --e-4: 8px;
+  --e-5: 12px;
+  --e-6: 16px;
+  --e-7: 24px;
+  --e-8: 32px;
+  --e-9: 48px;
+  --e-10: 64px;
+  --e-linha-y: 10px;          /* densidade compacta (padrão) */
+  --e-pente: 76px;            /* largura da coluna do pente de cobertura */
+  --e-rail: 320px;
+  --e-alvo: 44px;             /* alvo mínimo de toque */
+
+  /* raio ------------------------------------------------------------ */
+  --r-0: 0px;
+  --r-1: 2px;
+  --r-2: 4px;
+  --r-3: 8px;
+  --r-4: 12px;
+  --r-pilula: 999px;
+
+  /* movimento ------------------------------------------------------- */
+  --d-instantaneo: 90ms;
+  --d-rapido: 160ms;
+  --d-medio: 240ms;
+  --d-lento: 420ms;
+  --c-padrao: cubic-bezier(0.2, 0, 0.2, 1);
+  --c-saida: cubic-bezier(0.4, 0, 1, 1);
+  --c-entrada: cubic-bezier(0, 0, 0.2, 1);
+
+  /* ---------------- tema escuro (principal) ------------------------ */
+  --cor-superficie: #12161a;
+  --cor-superficie-elevada: #191e24;
+  --cor-superficie-afundada: #0d1114;
+  --cor-superficie-sutil: #1f252c;
+  --cor-borda: #262e36;
+  --cor-borda-forte: #38424c;
+  --cor-texto-primario: #e6ebef;
+  --cor-texto-secundario: #9aa6b1;
+  --cor-texto-terciario: #7a8792;
+  --cor-acento: #79b0d6;
+  --cor-acento-suave: #16283a;
+  --cor-acento-contorno: #2f5a7a;
+  --cor-positivo: #5fb08c;
+  --cor-negativo: #d97c7c;
+  --cor-atencao: #d6a75c;
+  --cor-foco: #9ad1f5;
+  --cor-foco-halo: rgba(154, 209, 245, 0.22);
+  --cor-cobertura-trilha: #232b33;
+  --cor-cobertura-1: #6c7a85;
+  --cor-cobertura-2: #9e9a7f;
+  --cor-cobertura-3: #c0a76b;
+  --cor-cobertura-4: #dcbb70;
+  --cor-cobertura-5: #f2d089;
+  --ev-1: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --ev-2: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --ev-3: 0 16px 40px rgba(0, 0, 0, 0.55);
+}
+
+[data-tema='claro'] {
+  --cor-superficie: #f4f6f7;
+  --cor-superficie-elevada: #ffffff;
+  --cor-superficie-afundada: #e8ecee;
+  --cor-superficie-sutil: #ecf0f2;
+  --cor-borda: #d3dade;
+  --cor-borda-forte: #a9b4bb;
+  --cor-texto-primario: #131a1f;
+  --cor-texto-secundario: #4c5a63;
+  --cor-texto-terciario: #6b7780;
+  --cor-acento: #1d6491;
+  --cor-acento-suave: #e2edf5;
+  --cor-acento-contorno: #9dc0d8;
+  --cor-positivo: #1f7a57;
+  --cor-negativo: #a8434a;
+  --cor-atencao: #8a5a11;
+  --cor-foco: #0b5d8c;
+  --cor-foco-halo: rgba(11, 93, 140, 0.18);
+  --cor-cobertura-trilha: #dde3e6;
+  --cor-cobertura-1: #838e95;
+  --cor-cobertura-2: #93844e;
+  --cor-cobertura-3: #a07a2c;
+  --cor-cobertura-4: #a96c14;
+  --cor-cobertura-5: #b05e06;
+  --ev-1: 0 1px 2px rgba(16, 24, 32, 0.07);
+  --ev-2: 0 6px 18px rgba(16, 24, 32, 0.1);
+  --ev-3: 0 16px 40px rgba(16, 24, 32, 0.14);
+}
+
+[data-densidade='confortavel'] { --e-linha-y: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-instantaneo: 1ms;
+    --d-rapido: 1ms;
+    --d-medio: 1ms;
+    --d-lento: 1ms;
+  }
+}

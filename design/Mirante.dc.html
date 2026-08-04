@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+--f-display:'Archivo','Helvetica Neue',Helvetica,sans-serif;
+--f-texto:'IBM Plex Sans','Helvetica Neue',Helvetica,sans-serif;
+--f-numero:'IBM Plex Mono',ui-monospace,SFMono-Regular,monospace;
+--t-microrrotulo:10px;--t-rotulo:11px;--t-legenda:12px;--t-corpo:13px;--t-corpo-forte:14px;
+--t-titulo-c:15px;--t-titulo-b:17px;--t-titulo-a:22px;--t-display:30px;--t-display-grande:44px;
+--p-regular:400;--p-medio:500;--p-forte:600;--p-display:700;
+--l-apertada:1.12;--l-titulo:1.22;--l-corpo:1.45;
+--k-display:-0.02em;--k-titulo:-0.01em;--k-rotulo:0.08em;
+--e-0:0px;--e-1:2px;--e-2:4px;--e-3:6px;--e-4:8px;--e-5:12px;--e-6:16px;--e-7:24px;--e-8:32px;--e-9:48px;--e-10:64px;
+--e-linha-y:10px;--e-pente:76px;--e-rail:320px;--e-alvo:44px;
+--r-0:0px;--r-1:2px;--r-2:4px;--r-3:8px;--r-4:12px;--r-pilula:999px;
+--d-instantaneo:90ms;--d-rapido:160ms;--d-medio:240ms;--d-lento:420ms;
+--c-padrao:cubic-bezier(.2,0,.2,1);--c-saida:cubic-bezier(.4,0,1,1);--c-entrada:cubic-bezier(0,0,.2,1);
+--cor-superficie:#12161a;--cor-superficie-elevada:#191e24;--cor-superficie-afundada:#0d1114;--cor-superficie-sutil:#1f252c;
+--cor-borda:#262e36;--cor-borda-forte:#38424c;
+--cor-texto-primario:#e6ebef;--cor-texto-secundario:#9aa6b1;--cor-texto-terciario:#7a8792;
+--cor-acento:#79b0d6;--cor-acento-suave:#16283a;--cor-acento-contorno:#2f5a7a;
+--cor-positivo:#5fb08c;--cor-negativo:#d97c7c;--cor-atencao:#d6a75c;
+--cor-foco:#9ad1f5;--cor-foco-halo:rgba(154,209,245,.22);
+--cor-cobertura-trilha:#232b33;--cor-cobertura-1:#6c7a85;--cor-cobertura-2:#9e9a7f;--cor-cobertura-3:#c0a76b;--cor-cobertura-4:#dcbb70;--cor-cobertura-5:#f2d089;
+--ev-1:0 1px 2px rgba(0,0,0,.45);--ev-2:0 6px 18px rgba(0,0,0,.5);--ev-3:0 16px 40px rgba(0,0,0,.55);
+}
+[data-tema="claro"]{
+--cor-superficie:#f4f6f7;--cor-superficie-elevada:#ffffff;--cor-superficie-afundada:#e8ecee;--cor-superficie-sutil:#ecf0f2;
+--cor-borda:#d3dade;--cor-borda-forte:#a9b4bb;
+--cor-texto-primario:#131a1f;--cor-texto-secundario:#4c5a63;--cor-texto-terciario:#6b7780;
+--cor-acento:#1d6491;--cor-acento-suave:#e2edf5;--cor-acento-contorno:#9dc0d8;
+--cor-positivo:#1f7a57;--cor-negativo:#a8434a;--cor-atencao:#8a5a11;
+--cor-foco:#0b5d8c;--cor-foco-halo:rgba(11,93,140,.18);
+--cor-cobertura-trilha:#dde3e6;--cor-cobertura-1:#838e95;--cor-cobertura-2:#93844e;--cor-cobertura-3:#a07a2c;--cor-cobertura-4:#a96c14;--cor-cobertura-5:#b05e06;
+--ev-1:0 1px 2px rgba(16,24,32,.07);--ev-2:0 6px 18px rgba(16,24,32,.1);--ev-3:0 16px 40px rgba(16,24,32,.14);
+}
+[data-densidade="confortavel"]{--e-linha-y:16px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--cor-superficie);color:var(--cor-texto-primario);font-family:var(--f-texto);font-size:var(--t-corpo);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--cor-acento);text-decoration:none}
+a:hover{color:var(--cor-texto-primario);text-decoration:underline}
+[data-num]{font-family:var(--f-numero);font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--cor-foco);outline-offset:2px;box-shadow:0 0 0 6px var(--cor-foco-halo)}
+[data-foco-demo="sim"] [data-focavel]{outline:2px solid var(--cor-foco);outline-offset:2px;box-shadow:0 0 0 6px var(--cor-foco-halo)}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--cor-borda-forte);border-radius:var(--r-pilula);border:3px solid var(--cor-superficie)}
+@keyframes mirante-sobe{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes mirante-respira{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes mirante-esqueleto{0%{opacity:.35}50%{opacity:.7}100%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:1ms !important;animation-iteration-count:1 !important;transition-duration:1ms !important}}
+</style>
+</helmet>
+
+<div data-tema="{{ tema }}" data-densidade="{{ densidade }}" data-foco-demo="{{ focoDemo }}" style="min-height:100vh;background:var(--cor-superficie);color:var(--cor-texto-primario);font-family:var(--f-texto)">
+
+  <header style="position:sticky;top:0;z-index:40;display:flex;align-items:stretch;gap:var(--e-7);padding:0 var(--e-6);height:52px;background:var(--cor-superficie-afundada);border-bottom:1px solid var(--cor-borda)">
+    <div style="display:flex;align-items:center;gap:var(--e-4);padding-right:var(--e-6);border-right:1px solid var(--cor-borda)">
+      <div style="display:flex;align-items:flex-end;gap:2px;height:14px" aria-hidden="true">
+        <div style="width:2px;height:6px;background:var(--cor-cobertura-1)"></div>
+        <div style="width:2px;height:10px;background:var(--cor-cobertura-3)"></div>
+        <div style="width:2px;height:14px;background:var(--cor-cobertura-5)"></div>
+      </div>
+      <span style="font-family:var(--f-display);font-weight:var(--p-display);font-size:var(--t-corpo-forte);letter-spacing:.18em;text-transform:uppercase">Mirante</span>
+      <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">sala de situação</span>
+    </div>
+
+    <nav aria-label="Telas" style="display:flex;align-items:center;gap:var(--e-1);overflow:auto">
+      <sc-for list="{{ telas }}" as="t" hint-placeholder-count="8">
+        <sc-if value="{{ t.ativo }}" hint-placeholder-val="{{ true }}">
+          <button type="button" aria-current="page" onClick="{{ t.ir }}" style="height:34px;padding:0 var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-2);background:var(--cor-acento-suave);color:var(--cor-texto-primario);font-size:var(--t-legenda);font-weight:var(--p-forte);white-space:nowrap">{{ t.rotulo }}</button>
+        </sc-if>
+        <sc-if value="{{ t.inativo }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ t.ir }}" style="height:34px;padding:0 var(--e-5);border:1px solid transparent;border-radius:var(--r-2);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-legenda);font-weight:var(--p-medio);white-space:nowrap;transition:color var(--d-rapido) var(--c-padrao),background var(--d-rapido) var(--c-padrao)" style-hover="background:var(--cor-superficie-sutil);color:var(--cor-texto-primario)">{{ t.rotulo }}</button>
+        </sc-if>
+      </sc-for>
+    </nav>
+
+    <div style="display:flex;align-items:center;gap:var(--e-5);margin-left:auto">
+      <div style="display:flex;align-items:center;gap:var(--e-2);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">
+        <span style="width:6px;height:6px;border-radius:var(--r-pilula);background:var(--cor-positivo);animation:mirante-respira 3.2s var(--c-padrao) infinite"></span>
+        <span>coleta ativa</span><span data-num style="color:var(--cor-texto-secundario)">22/24</span>
+      </div>
+      <div role="group" aria-label="Tema" style="display:flex;padding:2px;border:1px solid var(--cor-borda);border-radius:var(--r-2);background:var(--cor-superficie)">
+        <sc-if value="{{ ehEscuro }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ irEscuro }}" aria-pressed="true" style="min-height:28px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:var(--cor-superficie-sutil);color:var(--cor-texto-primario);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Escuro</button>
+          <button type="button" onClick="{{ irClaro }}" aria-pressed="false" style="min-height:28px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Claro</button>
+        </sc-if>
+        <sc-if value="{{ ehClaro }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ irEscuro }}" aria-pressed="false" style="min-height:28px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Escuro</button>
+          <button type="button" onClick="{{ irClaro }}" aria-pressed="true" style="min-height:28px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:var(--cor-superficie-sutil);color:var(--cor-texto-primario);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Claro</button>
+        </sc-if>
+      </div>
+      <button type="button" onClick="{{ alternarFoco }}" style="min-height:28px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Foco de teclado: {{ focoRotulo }}</button>
+    </div>
+  </header>
+
+  <sc-if value="{{ ehFeed }}" hint-placeholder-val="{{ true }}">
+  <main style="display:grid;grid-template-columns:minmax(0,1fr) var(--e-rail)">
+    <section aria-label="Fatos" style="min-width:0;border-right:1px solid var(--cor-borda)">
+
+      <div style="position:sticky;top:52px;z-index:30;display:flex;align-items:center;gap:var(--e-5);padding:var(--e-4) var(--e-6);background:var(--cor-superficie);border-bottom:1px solid var(--cor-borda)">
+        <h1 style="margin:0;font-family:var(--f-display);font-size:var(--t-corpo-forte);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Fatos de hoje</h1>
+        <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">ordenados por relevância</span>
+        <div role="group" aria-label="Período" style="display:flex;margin-left:auto;padding:2px;border:1px solid var(--cor-borda);border-radius:var(--r-2)">
+          <sc-for list="{{ periodos }}" as="p" hint-placeholder-count="3">
+            <sc-if value="{{ p.ativo }}" hint-placeholder-val="{{ true }}">
+              <button type="button" data-num onClick="{{ p.ir }}" aria-pressed="true" style="min-height:26px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:var(--cor-superficie-sutil);color:var(--cor-texto-primario);font-size:var(--t-rotulo);font-weight:var(--p-forte)">{{ p.rotulo }}</button>
+            </sc-if>
+            <sc-if value="{{ p.inativo }}" hint-placeholder-val="{{ false }}">
+              <button type="button" data-num onClick="{{ p.ir }}" aria-pressed="false" style="min-height:26px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">{{ p.rotulo }}</button>
+            </sc-if>
+          </sc-for>
+        </div>
+        <button type="button" onClick="{{ irRanking }}" style="min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Como isso é ordenado</button>
+      </div>
+
+      <div style="position:relative;height:0">
+        <sc-if value="{{ temFila }}" hint-placeholder-val="{{ true }}">
+          <div style="position:sticky;top:96px;z-index:25;display:flex;justify-content:center;pointer-events:none">
+            <button type="button" onClick="{{ inserirNovos }}" style="display:flex;align-items:center;gap:var(--e-4);margin-top:var(--e-5);min-height:36px;padding:0 var(--e-3) 0 var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-pilula);background:var(--cor-acento-suave);color:var(--cor-texto-primario);box-shadow:var(--ev-2);pointer-events:auto;animation:mirante-sobe var(--d-medio) var(--c-entrada)">
+              <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">{{ filaRotulo }}</span>
+              <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">{{ filaDetalhe }}</span>
+              <span style="display:inline-flex;align-items:center;height:24px;padding:0 var(--e-4);border-radius:var(--r-pilula);background:var(--cor-superficie);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Inserir</span>
+            </button>
+          </div>
+        </sc-if>
+      </div>
+
+      <sc-for list="{{ fatos }}" as="f" hint-placeholder-count="7">
+        <div data-linha role="link" tabindex="0" onClick="{{ f.abrir }}" onKeyDown="{{ f.teclado }}" onMouseEnter="{{ f.destacar }}" style="display:grid;grid-template-columns:var(--e-pente) minmax(0,1fr) 132px;gap:var(--e-6);padding:var(--e-linha-y) var(--e-6);border-bottom:1px solid var(--cor-borda);transition:background var(--d-rapido) var(--c-padrao)" style-hover="background:var(--cor-superficie-elevada)">
+
+          <div style="display:flex;flex-direction:column;gap:var(--e-3);padding-top:2px">
+            <div role="img" aria-label="{{ f.penteRotulo }}" style="display:flex;align-items:flex-end;gap:2px;height:26px;border-bottom:1px solid var(--cor-cobertura-trilha)">
+              <sc-for list="{{ f.ticks }}" as="k" hint-placeholder-count="6">
+                <div style="{{ k.estilo }}"></div>
+              </sc-for>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:var(--e-2)">
+              <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte);color:{{ f.corContagem }}">{{ f.n }}</span>
+              <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">{{ f.unidade }}</span>
+            </div>
+          </div>
+
+          <div style="min-width:0;display:flex;flex-direction:column;gap:var(--e-3)">
+            <sc-if value="{{ f.ehA }}" hint-placeholder-val="{{ true }}">
+              <h2 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-a);font-weight:var(--p-forte);line-height:var(--l-titulo);letter-spacing:var(--k-titulo);text-wrap:pretty">{{ f.titulo }}</h2>
+            </sc-if>
+            <sc-if value="{{ f.ehB }}" hint-placeholder-val="{{ false }}">
+              <h2 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);line-height:var(--l-titulo);letter-spacing:var(--k-titulo);text-wrap:pretty">{{ f.titulo }}</h2>
+            </sc-if>
+            <sc-if value="{{ f.ehC }}" hint-placeholder-val="{{ false }}">
+              <h2 style="margin:0;font-size:var(--t-titulo-c);font-weight:var(--p-medio);line-height:var(--l-titulo);color:var(--cor-texto-secundario);text-wrap:pretty">{{ f.titulo }}</h2>
+            </sc-if>
+            <sc-if value="{{ f.temResumo }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0;max-width:74ch;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario);text-wrap:pretty">{{ f.resumo }}</p>
+            </sc-if>
+            <div style="display:flex;flex-wrap:wrap;gap:var(--e-2)">
+              <sc-for list="{{ f.entidades }}" as="e" hint-placeholder-count="3">
+                <button type="button" style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:24px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);color:var(--cor-texto-secondario);font-size:var(--t-rotulo);transition:border-color var(--d-rapido) var(--c-padrao)" style-hover="border-color:var(--cor-borda-forte);color:var(--cor-texto-primario)">
+                  <span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);color:var(--cor-texto-terciario)">{{ e.tipo }}</span>
+                  <span data-num style="font-weight:var(--p-medio);color:var(--cor-texto-primario)">{{ e.rotulo }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:var(--e-3);text-align:right">
+            <span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ f.ha }}</span>
+            <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">{{ f.tema }}</span>
+            <sc-if value="{{ f.naCarteira }}" hint-placeholder-val="{{ true }}">
+              <span style="display:inline-flex;align-items:center;gap:var(--e-2);padding:0 var(--e-3);height:20px;border:1px solid var(--cor-acento-contorno);border-radius:var(--r-1);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-acento)">
+                <span style="width:0;height:0;border-left:4px solid currentColor;border-top:3px solid transparent;border-bottom:3px solid transparent"></span>na carteira
+              </span>
+            </sc-if>
+            <span data-num style="font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">escore {{ f.escore }}</span>
+          </div>
+        </div>
+      </sc-for>
+
+      <div style="display:flex;align-items:center;justify-content:center;gap:var(--e-4);padding:var(--e-7);color:var(--cor-texto-terciario);font-size:var(--t-legenda)">
+        <span data-num>{{ totalFatos }}</span><span>fatos nas últimas 24 h · rolagem virtualizada, 40 linhas por bloco</span>
+      </div>
+    </section>
+
+    <aside aria-label="Instrumentos" style="min-width:0;background:var(--cor-superficie-afundada)">
+      <div style="padding:var(--e-5) var(--e-6);border-bottom:1px solid var(--cor-borda)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-5)">
+          <h2 style="margin:0;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Séries oficiais</h2>
+          <span style="font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">Banco Central · SGS</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--e-5)">
+          <sc-for list="{{ series }}" as="s" hint-placeholder-count="4">
+            <button type="button" onClick="{{ s.abrir }}" style="display:grid;grid-template-columns:1fr auto;gap:var(--e-2) var(--e-5);width:100%;padding:var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:var(--cor-superficie);text-align:left;transition:border-color var(--d-rapido) var(--c-padrao)" style-hover="border-color:var(--cor-borda-forte)">
+              <span style="font-size:var(--t-legenda);font-weight:var(--p-medio)">{{ s.nome }}</span>
+              <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte)">{{ s.valor }}</span>
+              <span data-num style="font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">série {{ s.codigo }} · {{ s.quando }}</span>
+              <svg viewBox="0 0 72 18" width="72" height="18" aria-hidden="true" style="grid-column:2;justify-self:end">
+                <polyline points="{{ s.pontos }}" fill="none" stroke="{{ s.cor }}" stroke-width="1.5" vector-effect="non-scaling-stroke"></polyline>
+              </svg>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5) var(--e-6);border-bottom:1px solid var(--cor-borda)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-4)">
+          <h2 style="margin:0;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Sua carteira</h2>
+          <span data-num style="display:inline-flex;align-items:center;height:18px;padding:0 var(--e-3);border:1px solid var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-microrrotulo);color:var(--cor-texto-secundario)">cotação atrasada 15 min</span>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ carteira }}" as="a" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:var(--e-5);padding:var(--e-3) 0;border-bottom:1px solid var(--cor-borda)">
+              <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-medio)">{{ a.ticker }}</span>
+              <span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ a.preco }}</span>
+              <span data-num style="min-width:72px;text-align:right;font-size:var(--t-legenda);color:{{ a.cor }}">{{ a.variacao }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5) var(--e-6)">
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Saúde das fontes</h2>
+        <p style="margin:0 0 var(--e-4);font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Duas fontes estão sem responder. A contagem de veículos dos fatos abaixo pode estar incompleta.</p>
+        <div style="display:flex;flex-direction:column;gap:var(--e-3)">
+          <sc-for list="{{ fontesAlerta }}" as="v" hint-placeholder-count="2">
+            <div style="display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:var(--e-4)">
+              <span aria-hidden="true" style="{{ v.marca }}"></span>
+              <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ v.nome }}</span>
+              <span data-num style="font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">{{ v.estado }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <button type="button" onClick="{{ irFontes }}" style="margin-top:var(--e-5);width:100%;min-height:32px;border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Ver as 24 fontes</button>
+      </div>
+    </aside>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehChegada }}" hint-placeholder-val="{{ false }}">
+  <main style="display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);align-items:start">
+    <section style="padding:var(--e-7) var(--e-6);border-right:1px solid var(--cor-borda)">
+      <h1 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Chegada de itens novos</h1>
+      <p style="margin:0 0 var(--e-6);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">A lista nunca se reordena sob os olhos de quem está lendo. Os fatos novos ficam em espera e entram por clique.</p>
+      <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--e-5)">
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:var(--e-4);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="margin-top:7px;width:6px;height:6px;background:var(--cor-cobertura-3)"></span><span>A pílula é <strong style="color:var(--cor-texto-primario);font-weight:var(--p-forte)">sticky logo abaixo do cabeçalho</strong>, centralizada na coluna de fatos. Vive sempre no mesmo lugar, com ou sobreposta à primeira linha.</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:var(--e-4);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="margin-top:7px;width:6px;height:6px;background:var(--cor-cobertura-3)"></span><span>Até 50 itens ela conta fatos. Acima disso para de contar item e passa a contar <strong style="color:var(--cor-texto-primario);font-weight:var(--p-forte)">tema e ativo seu</strong> — 200 é um número que não informa nada.</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:var(--e-4);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="margin-top:7px;width:6px;height:6px;background:var(--cor-cobertura-3)"></span><span>Ao inserir, a rolagem não se move: os fatos entram acima e um <strong style="color:var(--cor-texto-primario);font-weight:var(--p-forte)">marcador de corte</strong> fica no ponto onde a leitura havia parado.</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:var(--e-4);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="margin-top:7px;width:6px;height:6px;background:var(--cor-cobertura-3)"></span><span>Com a pessoa parada no topo por mais de 20 s, a pílula se expande e mostra as três primeiras manchetes. Continua exigindo clique.</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:var(--e-4);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="margin-top:7px;width:6px;height:6px;background:var(--cor-cobertura-3)"></span><span>Com um fato aberto ela desaparece: a contagem passa a viver no rótulo da aba <span data-num style="color:var(--cor-texto-primario)">Feed 7</span>.</span></li>
+        <li style="display:grid;grid-template-columns:16px 1fr;gap:var(--e-4);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="margin-top:7px;width:6px;height:6px;background:var(--cor-cobertura-3)"></span><span>Atalho de teclado <span data-num style="padding:1px var(--e-3);border:1px solid var(--cor-borda);border-radius:var(--r-1);color:var(--cor-texto-primario)">N</span>. Entrada de 240 ms; com <span data-num>prefers-reduced-motion</span> só troca de opacidade, sem deslocamento.</span></li>
+      </ol>
+    </section>
+
+    <section style="padding:var(--e-7);display:flex;flex-direction:column;gap:var(--e-8)">
+      <div>
+        <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">1 · Poucos itens — 3 fatos</h2>
+        <div style="display:flex;justify-content:center;padding:var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-3);background:var(--cor-superficie-afundada)">
+          <button type="button" style="display:flex;align-items:center;gap:var(--e-4);min-height:36px;padding:0 var(--e-3) 0 var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-pilula);background:var(--cor-acento-suave);box-shadow:var(--ev-2)">
+            <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">3 fatos novos</span>
+            <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">nenhum sobre seus ativos</span>
+            <span style="display:inline-flex;align-items:center;height:24px;padding:0 var(--e-4);border-radius:var(--r-pilula);background:var(--cor-superficie);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Inserir</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">2 · Volume alto — mais de 200 fatos, a contagem vira composição</h2>
+        <div style="display:flex;justify-content:center;padding:var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-3);background:var(--cor-superficie-afundada)">
+          <div style="width:420px;padding:var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-3);background:var(--cor-acento-suave);box-shadow:var(--ev-2)">
+            <div style="display:flex;align-items:baseline;gap:var(--e-4)">
+              <span data-num style="font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte)">204</span>
+              <span style="font-size:var(--t-legenda);font-weight:var(--p-medio)">fatos novos desde há 3 h</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--e-3);margin:var(--e-5) 0">
+              <div style="display:grid;grid-template-columns:1fr 40px;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span>Política monetária</span><span data-num style="text-align:right;color:var(--cor-texto-primario)">61</span></div>
+              <div style="display:grid;grid-template-columns:1fr 40px;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span>Empresas e balanços</span><span data-num style="text-align:right;color:var(--cor-texto-primario)">48</span></div>
+              <div style="display:grid;grid-template-columns:1fr 40px;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span>Câmbio e internacional</span><span data-num style="text-align:right;color:var(--cor-texto-primario)">37</span></div>
+              <div style="display:grid;grid-template-columns:1fr 40px;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span>Outros 6 temas</span><span data-num style="text-align:right;color:var(--cor-texto-primario)">58</span></div>
+            </div>
+            <div style="display:flex;gap:var(--e-4)">
+              <button type="button" style="flex:1;min-height:36px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie);font-size:var(--t-legenda);font-weight:var(--p-forte)">Inserir os 204</button>
+              <button type="button" style="flex:1;min-height:36px;border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">Só os seus ativos (12)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">3 · Pessoa parada no topo — a pílula se abre e mostra o que espera</h2>
+        <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+          <div style="padding:var(--e-5) var(--e-6);border-bottom:1px solid var(--cor-borda);background:var(--cor-superficie-afundada)">
+            <div style="display:flex;align-items:center;gap:var(--e-4);margin-bottom:var(--e-4)">
+              <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">3 fatos novos em espera</span>
+              <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">o mais recente há 2 min</span>
+              <button type="button" style="margin-left:auto;min-height:32px;padding:0 var(--e-5);border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Inserir no topo</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--e-3)">
+              <sc-for list="{{ filaPreview }}" as="q" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:34px 1fr;gap:var(--e-4);align-items:baseline">
+                  <span data-num style="font-size:var(--t-rotulo);color:{{ q.cor }}">{{ q.n }}</span>
+                  <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ q.titulo }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:var(--e-6);display:flex;flex-direction:column;gap:var(--e-4)">
+            <div style="display:flex;align-items:center;gap:var(--e-4)">
+              <span data-num style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-atencao);white-space:nowrap">3 fatos inseridos · há 12 min</span>
+              <span style="flex:1;height:1px;background:var(--cor-atencao);opacity:.5"></span>
+            </div>
+            <p style="margin:0;font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-terciario)">O marcador de corte permanece na lista até a próxima inserção. É a única marca temporária que o feed aceita.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehRanking }}" hint-placeholder-val="{{ false }}">
+  <main style="display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);align-items:start">
+    <section style="padding:var(--e-7) var(--e-6);border-right:1px solid var(--cor-borda)">
+      <h1 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Por que este fato está nesta posição</h1>
+      <p style="margin:0 0 var(--e-6);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Os quatro pesos são seus. Mexer aqui reordena a lista à direita na hora, sem salvar nada escondido.</p>
+
+      <div data-num style="padding:var(--e-5);margin-bottom:var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:var(--cor-superficie-afundada);font-size:var(--t-legenda);line-height:1.9;color:var(--cor-texto-secundario)">
+        escore = <span style="color:var(--cor-texto-primario)">Σ peso(veículo)<sup>a</sup></span> × <span style="color:var(--cor-texto-primario)">(1 + ln n × b)</span> × <span style="color:var(--cor-texto-primario)">2<sup>−Δt/c</sup></span> × <span style="color:var(--cor-texto-primario)">d</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:var(--e-6)">
+        <div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-2)">
+            <label for="p-veiculo" style="font-size:var(--t-legenda);font-weight:var(--p-medio)">a · Peso do veículo</label>
+            <span data-num style="font-size:var(--t-legenda);color:var(--cor-acento)">{{ pesoVeiculo }}</span>
+          </div>
+          <div style="display:flex;align-items:center;min-height:44px">
+            <input id="p-veiculo" type="range" min="0.2" max="2.5" step="0.05" value="{{ pesoVeiculoV }}" onInput="{{ mudarVeiculo }}" style="width:100%;accent-color:var(--cor-acento)">
+          </div>
+          <p style="margin:0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Acima de 1, veículo grande vale desproporcionalmente mais. Abaixo, todos se aproximam.</p>
+        </div>
+        <div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-2)">
+            <label for="p-cobertura" style="font-size:var(--t-legenda);font-weight:var(--p-medio)">b · Amplitude de cobertura</label>
+            <span data-num style="font-size:var(--t-legenda);color:var(--cor-acento)">{{ pesoCobertura }}</span>
+          </div>
+          <div style="display:flex;align-items:center;min-height:44px">
+            <input id="p-cobertura" type="range" min="0" max="2.5" step="0.05" value="{{ pesoCoberturaV }}" onInput="{{ mudarCobertura }}" style="width:100%;accent-color:var(--cor-acento)">
+          </div>
+          <p style="margin:0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Quanto o número de veículos distintos empurra o fato para cima. Em 0, cobertura deixa de contar.</p>
+        </div>
+        <div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-2)">
+            <label for="p-meia" style="font-size:var(--t-legenda);font-weight:var(--p-medio)">c · Meia-vida da relevância</label>
+            <span data-num style="font-size:var(--t-legenda);color:var(--cor-acento)">{{ pesoMeiaVida }}</span>
+          </div>
+          <div style="display:flex;align-items:center;min-height:44px">
+            <input id="p-meia" type="range" min="2" max="24" step="1" value="{{ pesoMeiaVidaV }}" onInput="{{ mudarMeiaVida }}" style="width:100%;accent-color:var(--cor-acento)">
+          </div>
+          <p style="margin:0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Tempo para um fato valer metade. 6 h é intradiário; 24 h dá ao dia inteiro o mesmo peso.</p>
+        </div>
+        <div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-2)">
+            <label for="p-watch" style="font-size:var(--t-legenda);font-weight:var(--p-medio)">d · Bônus da watchlist</label>
+            <span data-num style="font-size:var(--t-legenda);color:var(--cor-acento)">{{ pesoWatch }}</span>
+          </div>
+          <div style="display:flex;align-items:center;min-height:44px">
+            <input id="p-watch" type="range" min="1" max="3" step="0.1" value="{{ pesoWatchV }}" onInput="{{ mudarWatch }}" style="width:100%;accent-color:var(--cor-acento)">
+          </div>
+          <p style="margin:0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Multiplicador aplicado quando o fato menciona um ativo seu. Em ×1 a watchlist não interfere na ordem.</p>
+        </div>
+        <button type="button" onClick="{{ restaurarPesos }}" style="align-self:flex-start;min-height:36px;padding:0 var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Voltar ao padrão do Mirante</button>
+      </div>
+    </section>
+
+    <section style="padding:var(--e-7);display:flex;flex-direction:column;gap:var(--e-7)">
+      <div>
+        <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Decomposição · fato selecionado</h2>
+        <div style="padding:var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-3);background:var(--cor-superficie-elevada)">
+          <p style="margin:0 0 var(--e-6);font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte);line-height:var(--l-titulo)">{{ fatoTitulo }}</p>
+          <div style="display:flex;flex-direction:column;gap:var(--e-5)">
+            <sc-for list="{{ partes }}" as="x" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:1fr 84px;gap:var(--e-2) var(--e-5);align-items:baseline">
+                <span style="font-size:var(--t-legenda);font-weight:var(--p-medio)">{{ x.rotulo }}</span>
+                <span data-num style="text-align:right;font-size:var(--t-corpo-forte);font-weight:var(--p-forte)">{{ x.valor }}</span>
+                <div style="grid-column:1/3;height:4px;background:var(--cor-superficie-afundada);border-radius:var(--r-1)"><div style="{{ x.barra }}"></div></div>
+                <span data-num style="grid-column:1/3;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ x.nota }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;padding-top:var(--e-5);border-top:1px solid var(--cor-borda)">
+              <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">Produto final</span>
+              <span data-num style="font-family:var(--f-display);font-size:var(--t-titulo-a);font-weight:var(--p-forte)">{{ produto }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Ordem resultante · clique para decompor outro fato</h2>
+        <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+          <sc-for list="{{ ranking }}" as="r" hint-placeholder-count="8">
+            <button type="button" onClick="{{ r.escolher }}" style="display:grid;grid-template-columns:28px minmax(0,1fr) 96px 64px;gap:var(--e-5);align-items:center;width:100%;padding:var(--e-4) var(--e-5);border:0;border-bottom:1px solid var(--cor-borda);background:transparent;text-align:left;transition:background var(--d-rapido) var(--c-padrao)" style-hover="background:var(--cor-superficie-elevada)">
+              <span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-terciario)">{{ r.posicao }}</span>
+              <span style="min-width:0;font-size:var(--t-legenda);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--cor-texto-primario)">{{ r.titulo }}</span>
+              <div style="height:6px;background:var(--cor-superficie-afundada);border-radius:var(--r-1)"><div style="{{ r.largura }}"></div></div>
+              <span data-num style="text-align:right;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ r.escore }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehFato }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7) var(--e-7) var(--e-9);max-width:1440px">
+    <div style="display:grid;grid-template-columns:var(--e-pente) minmax(0,1fr);gap:var(--e-7);padding-bottom:var(--e-6);border-bottom:1px solid var(--cor-borda-forte)">
+      <div style="display:flex;flex-direction:column;gap:var(--e-3)">
+        <div style="display:flex;align-items:flex-end;gap:2px;height:34px;border-bottom:1px solid var(--cor-cobertura-trilha)">
+          <sc-for list="{{ fatoTicks }}" as="k" hint-placeholder-count="12"><div style="{{ k.estilo }}"></div></sc-for>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:var(--e-2)">
+          <span data-num style="font-size:var(--t-titulo-b);font-weight:var(--p-forte);color:var(--cor-cobertura-5)">{{ fatoN }}</span>
+          <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">veículos</span>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:var(--e-5);margin-bottom:var(--e-4)">
+          <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">{{ fatoTema }}</span>
+          <span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ fatoHa }}</span>
+          <div style="display:flex;gap:var(--e-2)">
+            <sc-for list="{{ fatoEnt }}" as="e" hint-placeholder-count="3">
+              <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:22px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo)">
+                <span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);color:var(--cor-texto-terciario)">{{ e.tipo }}</span>
+                <span data-num>{{ e.rotulo }}</span>
+              </span>
+            </sc-for>
+          </div>
+        </div>
+        <h1 style="margin:0 0 var(--e-4);max-width:34ch;font-family:var(--f-display);font-size:var(--t-display);font-weight:var(--p-display);line-height:var(--l-apertada);letter-spacing:var(--k-display);text-wrap:pretty">{{ fatoTitulo }}</h1>
+        <p style="margin:0;max-width:80ch;font-size:var(--t-corpo-forte);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">{{ fatoResumo }}</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--e-7);margin-top:var(--e-7);align-items:start">
+      <section>
+        <div style="display:flex;align-items:baseline;gap:var(--e-5);margin-bottom:var(--e-5)">
+          <h2 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Como cada veículo enquadrou</h2>
+          <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">o Mirante não avalia quem está certo — a posição mostra a distância entre o texto publicado e o documento oficial</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:150px 44px minmax(0,1fr) 158px 190px 74px;gap:var(--e-5);padding:0 var(--e-4) var(--e-3);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda)">
+          <span>Veículo</span><span style="text-align:right">Peso</span><span>Como saiu</span><span>Enquadramento</span>
+          <span style="display:flex;justify-content:space-between"><span>documento</span><span>leitura</span></span>
+          <span style="text-align:right">Publicado</span>
+        </div>
+
+        <sc-for list="{{ enq }}" as="q" hint-placeholder-count="10">
+          <div style="display:grid;grid-template-columns:150px 44px minmax(0,1fr) 158px 190px 74px;gap:var(--e-5);align-items:center;padding:var(--e-4);border-bottom:1px solid var(--cor-borda);transition:background var(--d-rapido) var(--c-padrao)" style-hover="background:var(--cor-superficie-elevada)">
+            <sc-if value="{{ q.oficial }}" hint-placeholder-val="{{ false }}">
+              <span style="display:flex;align-items:center;gap:var(--e-3);font-size:var(--t-legenda);font-weight:var(--p-forte)">
+                <span aria-hidden="true" style="width:8px;height:8px;background:var(--cor-texto-primario)"></span>{{ q.veiculo }}
+              </span>
+            </sc-if>
+            <sc-if value="{{ q.imprensa }}" hint-placeholder-val="{{ true }}">
+              <span style="display:flex;align-items:center;gap:var(--e-3);font-size:var(--t-legenda);color:var(--cor-texto-secundario)">
+                <span aria-hidden="true" style="width:8px;height:8px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-pilula)"></span>{{ q.veiculo }}
+              </span>
+            </sc-if>
+            <span data-num style="text-align:right;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ q.peso }}</span>
+            <span style="min-width:0;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-primario);text-wrap:pretty">{{ q.titulo }}</span>
+            <span style="font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">{{ q.foco }}</span>
+            <div style="position:relative;height:20px;border-left:1px solid var(--cor-borda-forte);border-right:1px solid var(--cor-borda)">
+              <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--cor-borda)"></div>
+              <div style="position:absolute;top:4px;bottom:4px;left:50%;width:1px;background:var(--cor-borda)"></div>
+              <div style="{{ q.marcador }}"></div>
+            </div>
+            <span data-num style="text-align:right;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ q.ha }}</span>
+          </div>
+        </sc-for>
+      </section>
+
+      <aside style="display:flex;flex-direction:column;gap:var(--e-7);position:sticky;top:68px">
+        <div>
+          <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Distribuição do enquadramento</h2>
+          <div style="display:flex;flex-direction:column;gap:var(--e-5)">
+            <sc-for list="{{ focos }}" as="f" hint-placeholder-count="5">
+              <div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--e-2)">
+                  <span style="font-size:var(--t-legenda);font-weight:var(--p-medio)">{{ f.nome }}</span>
+                  <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">{{ f.n }} · {{ f.prop }}</span>
+                </div>
+                <div style="height:6px;background:var(--cor-superficie-afundada);border-radius:var(--r-1);margin-bottom:var(--e-2)"><div style="{{ f.barra }}"></div></div>
+                <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ f.desc }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:var(--cor-superficie-afundada)">
+          <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Vocabulário</h2>
+          <p style="margin:0 0 var(--e-3);font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">em todos os 12 textos</p>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--e-2);margin-bottom:var(--e-5)">
+            <span data-num style="padding:2px var(--e-3);border:1px solid var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-rotulo)">cautela</span>
+            <span data-num style="padding:2px var(--e-3);border:1px solid var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-rotulo)">12,25%</span>
+            <span data-num style="padding:2px var(--e-3);border:1px solid var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-rotulo)">unânime</span>
+          </div>
+          <p style="margin:0 0 var(--e-3);font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">em parte deles</p>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--e-2)">
+            <span data-num style="padding:2px var(--e-3);border:1px dashed var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">assimetria · 7</span>
+            <span data-num style="padding:2px var(--e-3);border:1px dashed var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">corte em setembro · 5</span>
+            <span data-num style="padding:2px var(--e-3);border:1px dashed var(--cor-borda-forte);border-radius:var(--r-1);font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">Planalto · 2</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehCorrelacao }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7);max-width:1440px">
+    <div style="display:flex;align-items:flex-end;gap:var(--e-7);margin-bottom:var(--e-6)">
+      <div>
+        <h1 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">IPCA 12 meses × volume de cobertura sobre inflação</h1>
+        <p style="margin:0;max-width:76ch;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Duas escalas independentes: a série oficial à esquerda, em pontos percentuais; a contagem de fatos publicados no mês à direita. Clique numa barra para filtrar o feed daquela janela.</p>
+      </div>
+      <div style="margin-left:auto;display:flex;flex-direction:column;gap:var(--e-3);align-items:flex-end">
+        <span data-num style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">série 433 · IBGE via BCB/SGS · atualizada há 3 h</span>
+        <button type="button" onClick="{{ limparJanela }}" style="min-height:32px;padding:0 var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">Limpar janela</button>
+      </div>
+    </div>
+
+    <div style="padding:var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-3);background:var(--cor-superficie-elevada)">
+      <div style="display:flex;align-items:center;gap:var(--e-7);margin-bottom:var(--e-5)">
+        <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)">
+          <span aria-hidden="true" style="width:22px;height:2px;background:var(--cor-texto-primario)"></span>
+          <span style="color:var(--cor-texto-secundario)">IPCA 12 meses · escala esquerda</span>
+        </span>
+        <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda)">
+          <span aria-hidden="true" style="width:8px;height:14px;background:var(--cor-cobertura-3)"></span>
+          <span style="color:var(--cor-texto-secundario)">Fatos publicados no mês · escala direita</span>
+        </span>
+        <span style="margin-left:auto;display:flex;align-items:baseline;gap:var(--e-4)">
+          <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">janela</span>
+          <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte)">{{ mesSel }}</span>
+          <span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ ipcaSel }} · {{ volSel }} fatos</span>
+        </span>
+      </div>
+      <canvas ref="{{ refGrafico }}" onClick="{{ cliqueGrafico }}" role="img" aria-label="Gráfico de duas escalas: IPCA de 12 meses e volume mensal de cobertura, de fevereiro de 2025 a julho de 2026. A tabela abaixo tem os mesmos dados." style="display:block;width:100%;height:300px;cursor:crosshair"></canvas>
+      <p style="margin:var(--e-4) 0 0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">O gráfico é decorativo para leitores de tela. Toda a informação está na tabela abaixo, navegável por setas.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--e-7);margin-top:var(--e-7);align-items:start">
+      <section>
+        <div style="display:flex;align-items:baseline;gap:var(--e-4);margin-bottom:var(--e-5)">
+          <h2 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Feed filtrado · {{ mesSel }}</h2>
+          <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ volSel }} fatos, 5 mais relevantes</span>
+        </div>
+        <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+          <sc-for list="{{ janela }}" as="j" hint-placeholder-count="5">
+            <div onMouseEnter="{{ j.entrar }}" onMouseLeave="{{ j.sair }}" tabindex="0" style="display:grid;grid-template-columns:44px minmax(0,1fr) 34px;gap:var(--e-5);align-items:center;padding:var(--e-5);border-bottom:1px solid var(--cor-borda);transition:background var(--d-rapido) var(--c-padrao)" style-hover="background:var(--cor-superficie-elevada)">
+              <div style="display:flex;flex-direction:column;align-items:flex-start;gap:var(--e-1)">
+                <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte);color:{{ j.cor }}">{{ j.n }}</span>
+                <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">veíc.</span>
+              </div>
+              <span style="font-size:var(--t-corpo);line-height:var(--l-corpo);text-wrap:pretty">{{ j.titulo }}</span>
+              <span data-num style="text-align:right;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ j.dia }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section>
+        <div style="display:flex;align-items:baseline;gap:var(--e-4);margin-bottom:var(--e-5)">
+          <h2 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Os mesmos dados em tabela</h2>
+          <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">↑ ↓ percorre · Enter filtra o feed</span>
+        </div>
+        <p style="margin:0 0 var(--e-5);font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Em 11 dos 18 meses a cobertura acompanha a direção do índice com um mês de atraso. O pico de fevereiro de 2026, com 402 fatos, é a maior exceção: a imprensa dobrou o volume enquanto o IPCA subia 0,17 ponto.</p>
+        <div style="max-height:436px;overflow:auto;border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+          <table style="width:100%;border-collapse:collapse;font-size:var(--t-legenda)">
+            <caption style="padding:var(--e-4) var(--e-5);text-align:left;font-size:var(--t-rotulo);color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda)">IPCA acumulado em 12 meses e número de fatos sobre inflação por mês, fev/25 a jul/26</caption>
+            <thead>
+              <tr style="position:sticky;top:0;background:var(--cor-superficie-afundada)">
+                <th scope="col" style="padding:var(--e-3) var(--e-5);text-align:left;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Mês</th>
+                <th scope="col" style="padding:var(--e-3) var(--e-5);text-align:right;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">IPCA 12 m</th>
+                <th scope="col" style="padding:var(--e-3) var(--e-5);text-align:right;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Δ p.p.</th>
+                <th scope="col" style="padding:var(--e-3) var(--e-5);text-align:right;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Fatos</th>
+                <th scope="col" style="padding:var(--e-3) var(--e-5);text-align:right;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Δ cob.</th>
+                <th scope="col" style="padding:var(--e-3) var(--e-5);text-align:left;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Nota</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ tabela }}" as="r" hint-placeholder-count="10">
+                <tr data-linha-tabela="{{ $index }}" tabindex="{{ r.foco }}" onKeyDown="{{ r.teclado }}" onClick="{{ r.escolher }}" aria-selected="{{ r.selecionada }}" style="cursor:pointer">
+                  <td data-num style="padding:var(--e-3) var(--e-5);border-bottom:1px solid var(--cor-borda);color:var(--cor-texto-secundario)">{{ r.mes }}</td>
+                  <td data-num style="padding:var(--e-3) var(--e-5);text-align:right;border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">{{ r.ipca }}</td>
+                  <td data-num style="padding:var(--e-3) var(--e-5);text-align:right;border-bottom:1px solid var(--cor-borda);color:var(--cor-texto-terciario)">{{ r.dipca }}</td>
+                  <td data-num style="padding:var(--e-3) var(--e-5);text-align:right;border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">{{ r.vol }}</td>
+                  <td data-num style="padding:var(--e-3) var(--e-5);text-align:right;border-bottom:1px solid var(--cor-borda);color:var(--cor-texto-terciario)">{{ r.dvol }}</td>
+                  <td data-num style="padding:var(--e-3) var(--e-5);border-bottom:1px solid var(--cor-borda);color:var(--cor-atencao)">{{ r.pico }}</td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehWatchlist }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7);max-width:1180px">
+    <div style="display:flex;align-items:flex-end;gap:var(--e-6);margin-bottom:var(--e-6)">
+      <div>
+        <h1 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Seus ativos nas últimas 48 h</h1>
+        <p style="margin:0;font-size:var(--t-corpo);color:var(--cor-texto-secundario)">Oito posições monitoradas · 14 fatos mencionaram ao menos uma delas</p>
+      </div>
+      <div role="group" aria-label="Estado da tela" style="margin-left:auto;display:flex;padding:2px;border:1px solid var(--cor-borda);border-radius:var(--r-2)">
+        <button type="button" onClick="{{ irDados }}" style="min-height:30px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:transparent;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">Com fatos</button>
+        <button type="button" onClick="{{ irNada }}" style="min-height:30px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:transparent;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">Nada novo</button>
+        <button type="button" onClick="{{ irVazio }}" style="min-height:30px;padding:0 var(--e-4);border:0;border-radius:var(--r-1);background:transparent;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">Lista vazia</button>
+      </div>
+    </div>
+
+    <sc-if value="{{ wDados }}" hint-placeholder-val="{{ true }}">
+      <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+        <div style="display:grid;grid-template-columns:118px minmax(0,1fr) 96px 84px 92px 120px;gap:var(--e-5);padding:var(--e-4) var(--e-6);background:var(--cor-superficie-afundada);border-bottom:1px solid var(--cor-borda);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">
+          <span>Ativo</span><span>Nome</span><span style="text-align:right">Último</span><span style="text-align:right">Variação</span><span style="text-align:right">Fatos 48 h</span><span style="text-align:right">Cobertura 7 d</span>
+        </div>
+        <sc-for list="{{ ativos }}" as="a" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:118px minmax(0,1fr) 96px 84px 92px 120px;gap:var(--e-5);align-items:center;padding:var(--e-5) var(--e-6);border-bottom:1px solid var(--cor-borda);transition:background var(--d-rapido) var(--c-padrao)" style-hover="background:var(--cor-superficie-elevada)">
+            <span style="display:flex;align-items:center;gap:var(--e-3)">
+              <span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);color:var(--cor-texto-terciario)">{{ a.tipo }}</span>
+              <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte)">{{ a.ticker }}</span>
+            </span>
+            <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ a.nome }}</span>
+            <span data-num style="text-align:right;font-size:var(--t-legenda)">{{ a.preco }}</span>
+            <span data-num style="text-align:right;font-size:var(--t-legenda);color:{{ a.cor }}">{{ a.variacao }}</span>
+            <sc-if value="{{ a.temFatos }}" hint-placeholder-val="{{ true }}">
+              <span data-num style="text-align:right;font-size:var(--t-corpo-forte);font-weight:var(--p-forte)">{{ a.fatos }}</span>
+            </sc-if>
+            <sc-if value="{{ a.semFatos }}" hint-placeholder-val="{{ false }}">
+              <span data-num style="text-align:right;font-size:var(--t-legenda);color:var(--cor-texto-terciario)">—</span>
+            </sc-if>
+            <svg viewBox="0 0 72 18" width="72" height="18" aria-hidden="true" style="justify-self:end">
+              <polyline points="{{ a.pontos }}" fill="none" stroke="var(--cor-cobertura-3)" stroke-width="1.5"></polyline>
+            </svg>
+          </div>
+        </sc-for>
+      </div>
+      <p data-num style="margin:var(--e-5) 0 0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Cotações com atraso de 15 min · fonte B3 · a coluna de cobertura conta fatos, não notícias</p>
+    </sc-if>
+
+    <sc-if value="{{ wNada }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:var(--e-9) var(--e-7);border:1px solid var(--cor-borda);border-radius:var(--r-3);background:var(--cor-superficie-elevada)">
+        <div style="display:flex;align-items:flex-end;gap:2px;height:26px;margin-bottom:var(--e-6);opacity:.5" aria-hidden="true">
+          <div style="width:2px;height:4px;background:var(--cor-cobertura-trilha)"></div>
+          <div style="width:2px;height:4px;background:var(--cor-cobertura-trilha)"></div>
+          <div style="width:2px;height:4px;background:var(--cor-cobertura-trilha)"></div>
+        </div>
+        <h2 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte)">Nenhum fato mencionou seus ativos hoje</h2>
+        <p style="margin:0 0 var(--e-6);max-width:64ch;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Silêncio da imprensa é informação: nas últimas 24 h, 148 fatos entraram no Mirante e nenhum citou PETR4, VALE3, ITUB4, BBAS3, WEGE3, HGLG11, KNRI11 ou o Tesouro IPCA+ 2029. As séries que você acompanha continuam atualizando normalmente.</p>
+        <div style="display:flex;gap:var(--e-5)">
+          <button type="button" style="min-height:38px;padding:0 var(--e-6);border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie);font-size:var(--t-legenda);font-weight:var(--p-forte)">Ver os 12 fatos de macro do dia</button>
+          <button type="button" style="min-height:38px;padding:0 var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">Ampliar a janela para 7 dias</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ wVazio }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:var(--e-9) var(--e-7);border:1px dashed var(--cor-borda-forte);border-radius:var(--r-3)">
+        <h2 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte)">Sua lista está vazia</h2>
+        <p style="margin:0 0 var(--e-6);max-width:64ch;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Sem ativos na lista, o feed continua ordenado por cobertura e recência — só não há o multiplicador de watchlist. Adicione um ticker, um FII ou um título para o Mirante marcar os fatos que tocam a sua carteira.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--e-3);margin-bottom:var(--e-6)">
+          <span style="font-size:var(--t-legenda);color:var(--cor-texto-terciario);align-self:center">Sugestões pelo que você mais abriu:</span>
+          <sc-for list="{{ carteira }}" as="c" hint-placeholder-count="4">
+            <button type="button" style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:30px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo)">
+              <span data-num>{{ c.ticker }}</span><span style="color:var(--cor-acento)">adicionar</span>
+            </button>
+          </sc-for>
+        </div>
+        <button type="button" style="min-height:38px;padding:0 var(--e-6);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-2);background:var(--cor-acento-suave);font-size:var(--t-legenda);font-weight:var(--p-forte)">Importar carteira de um arquivo da B3</button>
+      </div>
+    </sc-if>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehFontes }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7);max-width:1180px">
+    <h1 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Saúde das fontes</h1>
+    <p style="margin:0 0 var(--e-6);max-width:80ch;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">A contagem de veículos só significa algo se você souber quantas fontes estavam de pé. Quando alguma cai, o Mirante avisa e desconta: nenhum fato coletado durante a queda aparece com contagem tratada como completa.</p>
+
+    <div style="display:flex;gap:var(--e-7);padding:var(--e-6);margin-bottom:var(--e-6);border:1px solid var(--cor-borda);border-radius:var(--r-3);background:var(--cor-superficie-elevada)">
+      <div>
+        <span data-num style="font-family:var(--f-display);font-size:var(--t-display);font-weight:var(--p-display)">{{ fontesAtivas }}</span>
+        <span data-num style="font-size:var(--t-corpo-forte);color:var(--cor-texto-terciario)">/24</span>
+        <p style="margin:var(--e-2) 0 0;font-size:var(--t-rotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">fontes respondendo</p>
+      </div>
+      <div style="width:1px;background:var(--cor-borda)"></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:var(--e-3)">
+        <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);background:var(--cor-positivo)"></span>respondendo — coleta dentro de 5 min</span>
+        <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);border:1.5px solid var(--cor-atencao);background:linear-gradient(90deg,var(--cor-atencao) 50%,transparent 50%)"></span>atrasada — última coleta entre 5 e 60 min</span>
+        <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);border:1.5px solid var(--cor-atencao)"></span>sem resposta — acima de 60 min, contagem marcada como parcial</span>
+      </div>
+      <div style="margin-left:auto;align-self:center;max-width:34ch">
+        <p style="margin:0;font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-terciario)">Duas fontes fora não invalidam o dia: 9 dos 10 temas seguem com cobertura de pelo menos três veículos independentes.</p>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 130px 64px 110px 92px 168px;gap:var(--e-5);padding:var(--e-4) var(--e-6);background:var(--cor-superficie-afundada);border-bottom:1px solid var(--cor-borda);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">
+        <span>Fonte</span><span>Categoria</span><span style="text-align:right">Peso</span><span style="text-align:right">Último item</span><span style="text-align:right">Latência</span><span>Estado</span>
+      </div>
+      <sc-for list="{{ fontes }}" as="f" hint-placeholder-count="12">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 130px 64px 110px 92px 168px;gap:var(--e-5);align-items:center;padding:var(--e-4) var(--e-6);border-bottom:1px solid var(--cor-borda)">
+          <span style="font-size:var(--t-legenda);font-weight:var(--p-medio)">{{ f.nome }}</span>
+          <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ f.categoria }}</span>
+          <span data-num style="text-align:right;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ f.peso }}</span>
+          <span data-num style="text-align:right;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ f.ultimo }}</span>
+          <span data-num style="text-align:right;font-size:var(--t-legenda);color:var(--cor-texto-terciario)">{{ f.latencia }}</span>
+          <sc-if value="{{ f.ativa }}" hint-placeholder-val="{{ true }}">
+            <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-rotulo);color:var(--cor-texto-terciario)"><span aria-hidden="true" style="width:8px;height:8px;border-radius:var(--r-pilula);background:var(--cor-positivo)"></span>respondendo</span>
+          </sc-if>
+          <sc-if value="{{ f.atrasada }}" hint-placeholder-val="{{ false }}">
+            <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-rotulo);color:var(--cor-atencao)"><span aria-hidden="true" style="width:8px;height:8px;border-radius:var(--r-pilula);border:1.5px solid var(--cor-atencao);background:linear-gradient(90deg,var(--cor-atencao) 50%,transparent 50%)"></span>atrasada 38 min</span>
+          </sc-if>
+          <sc-if value="{{ f.fora }}" hint-placeholder-val="{{ false }}">
+            <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-rotulo);color:var(--cor-atencao)"><span aria-hidden="true" style="width:8px;height:8px;border-radius:var(--r-pilula);border:1.5px solid var(--cor-atencao)"></span>sem resposta há 2 h 40</span>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehEstados }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7);max-width:1400px">
+    <h1 style="margin:0 0 var(--e-6);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Estados do feed</h1>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--e-7)">
+
+      <section>
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Carregando · 3 linhas fantasma, sem spinner</h2>
+        <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+          <sc-for list="{{ esqueletos }}" as="s" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:var(--e-pente) minmax(0,1fr);gap:var(--e-6);padding:var(--e-5) var(--e-6);border-bottom:1px solid var(--cor-borda)">
+              <div style="display:flex;align-items:flex-end;gap:2px;height:26px;border-bottom:1px solid var(--cor-cobertura-trilha);animation:mirante-esqueleto 1.6s var(--c-padrao) infinite">
+                <div style="width:2px;height:9px;background:var(--cor-superficie-sutil)"></div>
+                <div style="width:2px;height:15px;background:var(--cor-superficie-sutil)"></div>
+                <div style="width:2px;height:12px;background:var(--cor-superficie-sutil)"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:var(--e-4);padding-top:var(--e-1)">
+                <div style="{{ s.largura }}"></div>
+                <div style="height:9px;width:62%;border-radius:var(--r-1);background:var(--cor-superficie-sutil);animation:mirante-esqueleto 1.6s var(--c-padrao) infinite"></div>
+              </div>
+            </div>
+          </sc-for>
+          <p data-num style="margin:0;padding:var(--e-4) var(--e-6);font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">consultando 24 fontes · 6 já responderam</p>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Vazio · filtro restritivo, não ausência de mundo</h2>
+        <div style="padding:var(--e-7);border:1px solid var(--cor-borda);border-radius:var(--r-3);height:calc(100% - 22px)">
+          <h3 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Nenhum fato com esses filtros nas últimas 24 h</h3>
+          <p style="margin:0 0 var(--e-5);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Você está filtrando por <span data-num style="color:var(--cor-texto-primario)">Fundos imobiliários</span> e <span data-num style="color:var(--cor-texto-primario)">8+ veículos</span>. Fatos de FII raramente passam de cinco veículos.</p>
+          <div style="display:flex;gap:var(--e-4)">
+            <button type="button" style="min-height:36px;padding:0 var(--e-5);border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie);font-size:var(--t-legenda);font-weight:var(--p-forte)">Baixar para 3+ veículos</button>
+            <button type="button" style="min-height:36px;padding:0 var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">Ampliar para 7 dias</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Erro · diz o que falhou e o que ainda funciona</h2>
+        <div style="padding:var(--e-7);border:1px solid var(--cor-atencao);border-radius:var(--r-3);background:var(--cor-superficie-elevada)">
+          <h3 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Não foi possível recalcular a ordenação</h3>
+          <p style="margin:0 0 var(--e-5);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">O serviço de ranking não respondeu. Você está vendo a última ordenação válida, de <span data-num style="color:var(--cor-texto-primario)">há 8 min</span> — os fatos estão corretos, a posição pode estar velha.</p>
+          <div style="display:flex;align-items:center;gap:var(--e-5)">
+            <button type="button" style="min-height:36px;padding:0 var(--e-5);border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie);font-size:var(--t-legenda);font-weight:var(--p-forte)">Tentar de novo</button>
+            <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">ref. RNK-503 · 14:22:07</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Sem permissão · série restrita ao plano institucional</h2>
+        <div style="padding:var(--e-7);border:1px dashed var(--cor-borda-forte);border-radius:var(--r-3)">
+          <h3 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">A curva de juros futuros não está no seu plano</h3>
+          <p style="margin:0 0 var(--e-5);font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">DI de 1 dia por vencimento vem de contrato pago com a B3. Séries do Banco Central, IBGE e Tesouro continuam abertas para você, incluindo Selic, IPCA e Ptax.</p>
+          <div style="display:flex;align-items:center;gap:var(--e-5)">
+            <button type="button" style="min-height:36px;padding:0 var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;font-size:var(--t-legenda);color:var(--cor-texto-secundario)">Ver o que muda no plano</button>
+            <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">sem contagem regressiva, sem oferta</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Fonte fora do ar · faixa discreta no topo da lista</h2>
+        <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);overflow:hidden">
+          <div style="display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:var(--e-5);align-items:center;padding:var(--e-4) var(--e-6);background:var(--cor-superficie-afundada);border-bottom:1px solid var(--cor-borda)">
+            <span aria-hidden="true" style="width:10px;height:10px;border:1.5px solid var(--cor-atencao);border-radius:var(--r-pilula)"></span>
+            <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">Agência Brasil sem resposta há 2 h 40. Contagens desta janela marcadas como parciais.</span>
+            <button type="button" style="min-height:28px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);background:transparent;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">Detalhes</button>
+          </div>
+          <div style="display:grid;grid-template-columns:var(--e-pente) minmax(0,1fr);gap:var(--e-6);padding:var(--e-5) var(--e-6)">
+            <div style="display:flex;flex-direction:column;gap:var(--e-3)">
+              <div style="display:flex;align-items:flex-end;gap:2px;height:26px;border-bottom:1px dashed var(--cor-atencao)">
+                <div style="width:2px;height:18px;background:var(--cor-cobertura-3)"></div>
+                <div style="width:2px;height:14px;background:var(--cor-cobertura-3)"></div>
+                <div style="width:2px;height:20px;background:var(--cor-cobertura-3)"></div>
+                <div style="width:2px;height:12px;background:var(--cor-cobertura-3)"></div>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:var(--e-2)">
+                <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte);color:var(--cor-cobertura-3)">4</span>
+                <span data-num style="font-size:var(--t-microrrotulo);color:var(--cor-atencao)">+?</span>
+              </div>
+            </div>
+            <div>
+              <h3 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);line-height:var(--l-titulo)">Produção industrial recua 0,4% em maio e acumula queda de 1,1% no trimestre</h3>
+              <p data-num style="margin:0;font-size:var(--t-rotulo);color:var(--cor-atencao)">contagem parcial · base da linha tracejada em vez de contínua</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="margin:0 0 var(--e-4);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Foco de teclado · anel de 2 px, deslocamento de 2 px, halo de 6 px</h2>
+        <div style="border:1px solid var(--cor-borda);border-radius:var(--r-3);padding:var(--e-6);display:flex;flex-direction:column;gap:var(--e-6)">
+          <div data-focavel style="display:grid;grid-template-columns:var(--e-pente) minmax(0,1fr);gap:var(--e-6);padding:var(--e-5);border-radius:var(--r-2);background:var(--cor-superficie-elevada);outline:2px solid var(--cor-foco);outline-offset:2px;box-shadow:0 0 0 6px var(--cor-foco-halo)">
+            <div style="display:flex;flex-direction:column;gap:var(--e-3)">
+              <div style="display:flex;align-items:flex-end;gap:2px;height:26px;border-bottom:1px solid var(--cor-cobertura-trilha)">
+                <div style="width:2px;height:22px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:18px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:24px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:16px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:20px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:14px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:19px;background:var(--cor-cobertura-4)"></div>
+                <div style="width:2px;height:12px;background:var(--cor-cobertura-4)"></div>
+              </div>
+              <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte);color:var(--cor-cobertura-4)">8</span>
+            </div>
+            <div>
+              <h3 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);line-height:var(--l-titulo)">Itaú Unibanco reporta ROE de 22,4% no 2T26 e eleva a projeção de carteira</h3>
+              <p data-num style="margin:0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Tab entra na linha · Enter abre o fato · E abre a explicação do ranking</p>
+            </div>
+          </div>
+          <div style="display:flex;gap:var(--e-5);align-items:center">
+            <button type="button" data-focavel style="min-height:36px;padding:0 var(--e-5);border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie-elevada);font-size:var(--t-legenda);font-weight:var(--p-forte);outline:2px solid var(--cor-foco);outline-offset:2px;box-shadow:0 0 0 6px var(--cor-foco-halo)">Inserir 7 fatos</button>
+            <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo);outline:2px solid var(--cor-foco);outline-offset:2px;box-shadow:0 0 0 6px var(--cor-foco-halo)">
+              <span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">AÇÃO</span><span data-num>PETR4</span>
+            </span>
+            <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">o anel nunca é cortado: nenhuma linha usa overflow hidden</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehMobile }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7)">
+    <h1 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Mobile · 390 px</h1>
+    <p style="margin:0 0 var(--e-7);max-width:80ch;font-size:var(--t-corpo);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">O pente gira: no desktop é uma coluna à esquerda do título, no telefone vira uma faixa acima dele, com a contagem e o tempo relativo na mesma linha. Nada de imagem, nada de cartão — a densidade se mantém e só a coluna de instrumentos vai para uma gaveta.</p>
+
+    <div style="display:flex;gap:var(--e-7);flex-wrap:wrap;align-items:flex-start">
+
+      <div style="width:390px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-4);overflow:hidden;background:var(--cor-superficie)">
+        <div style="display:flex;align-items:center;gap:var(--e-4);padding:var(--e-5);border-bottom:1px solid var(--cor-borda);background:var(--cor-superficie-afundada)">
+          <span style="font-family:var(--f-display);font-weight:var(--p-display);font-size:var(--t-legenda);letter-spacing:.18em;text-transform:uppercase">Mirante</span>
+          <span data-num style="margin-left:auto;font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">22/24 fontes</span>
+          <span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);background:var(--cor-positivo)"></span>
+        </div>
+        <div style="display:flex;gap:var(--e-2);padding:var(--e-4) var(--e-5);border-bottom:1px solid var(--cor-borda);overflow:auto">
+          <span style="min-height:32px;display:inline-flex;align-items:center;padding:0 var(--e-4);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-2);background:var(--cor-acento-suave);font-size:var(--t-rotulo);font-weight:var(--p-forte);white-space:nowrap">Todos</span>
+          <span style="min-height:32px;display:inline-flex;align-items:center;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);font-size:var(--t-rotulo);color:var(--cor-texto-secundario);white-space:nowrap">Meus ativos</span>
+          <span style="min-height:32px;display:inline-flex;align-items:center;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);font-size:var(--t-rotulo);color:var(--cor-texto-secundario);white-space:nowrap">Macro</span>
+          <span style="min-height:32px;display:inline-flex;align-items:center;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-2);font-size:var(--t-rotulo);color:var(--cor-texto-secundario);white-space:nowrap">FII</span>
+        </div>
+        <div style="display:flex;justify-content:center;padding:var(--e-4) 0">
+          <button type="button" style="display:flex;align-items:center;gap:var(--e-3);min-height:36px;padding:0 var(--e-3) 0 var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-pilula);background:var(--cor-acento-suave);box-shadow:var(--ev-2)">
+            <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">7 novos</span>
+            <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">2 seus</span>
+            <span style="display:inline-flex;align-items:center;height:26px;padding:0 var(--e-4);border-radius:var(--r-pilula);background:var(--cor-superficie);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Inserir</span>
+          </button>
+        </div>
+        <div style="padding:var(--e-5);border-top:1px solid var(--cor-borda);border-bottom:1px solid var(--cor-borda)">
+          <div style="display:flex;align-items:flex-end;gap:var(--e-4);margin-bottom:var(--e-4)">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:22px;border-bottom:1px solid var(--cor-cobertura-trilha)">
+              <div style="width:2px;height:20px;background:var(--cor-cobertura-5)"></div><div style="width:2px;height:16px;background:var(--cor-cobertura-5);opacity:.95"></div><div style="width:2px;height:22px;background:var(--cor-cobertura-5);opacity:.9"></div><div style="width:2px;height:14px;background:var(--cor-cobertura-5);opacity:.86"></div><div style="width:2px;height:19px;background:var(--cor-cobertura-5);opacity:.82"></div><div style="width:2px;height:12px;background:var(--cor-cobertura-5);opacity:.78"></div><div style="width:2px;height:21px;background:var(--cor-cobertura-5);opacity:.74"></div><div style="width:2px;height:17px;background:var(--cor-cobertura-5);opacity:.7"></div><div style="width:2px;height:13px;background:var(--cor-cobertura-5);opacity:.66"></div><div style="width:2px;height:20px;background:var(--cor-cobertura-5);opacity:.62"></div><div style="width:2px;height:15px;background:var(--cor-cobertura-5);opacity:.58"></div><div style="width:2px;height:18px;background:var(--cor-cobertura-5);opacity:.54"></div><div style="width:2px;height:11px;background:var(--cor-cobertura-5);opacity:.5"></div><div style="width:2px;height:16px;background:var(--cor-cobertura-5);opacity:.48"></div><div style="width:2px;height:14px;background:var(--cor-cobertura-5);opacity:.46"></div><div style="width:2px;height:19px;background:var(--cor-cobertura-5);opacity:.45"></div><div style="width:2px;height:12px;background:var(--cor-cobertura-5);opacity:.45"></div><div style="width:2px;height:17px;background:var(--cor-cobertura-5);opacity:.45"></div>
+            </div>
+            <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte);color:var(--cor-cobertura-5)">18</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">há 42 min</span>
+          </div>
+          <h3 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);line-height:var(--l-titulo);text-wrap:pretty">Copom mantém a Selic em 12,25% e retira do comunicado a referência a cortes graduais</h3>
+          <p style="margin:0 0 var(--e-4);font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">A decisão foi unânime e o comunicado trocou "redução gradual" por "cautela adicional diante da assimetria dos riscos".</p>
+          <div style="display:flex;gap:var(--e-2);overflow:auto">
+            <span style="display:inline-flex;align-items:center;gap:var(--e-2);min-height:28px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);font-size:var(--t-rotulo);white-space:nowrap"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">INST</span><span data-num>Copom</span></span>
+            <span style="display:inline-flex;align-items:center;gap:var(--e-2);min-height:28px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);font-size:var(--t-rotulo);white-space:nowrap"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">SÉRIE</span><span data-num>Selic 432</span></span>
+          </div>
+        </div>
+        <div style="padding:var(--e-5);border-bottom:1px solid var(--cor-borda)">
+          <div style="display:flex;align-items:flex-end;gap:var(--e-4);margin-bottom:var(--e-3)">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:18px;border-bottom:1px solid var(--cor-cobertura-trilha)">
+              <div style="width:2px;height:14px;background:var(--cor-cobertura-2)"></div><div style="width:2px;height:11px;background:var(--cor-cobertura-2);opacity:.85"></div><div style="width:2px;height:16px;background:var(--cor-cobertura-2);opacity:.7"></div>
+            </div>
+            <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-forte);color:var(--cor-cobertura-2)">3</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">há 4 h</span>
+          </div>
+          <h3 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte);line-height:var(--l-titulo)">HGLG11 aprova nova emissão de cotas a R$ 172,30</h3>
+        </div>
+        <div style="padding:var(--e-5)">
+          <div style="display:flex;align-items:flex-end;gap:var(--e-4);margin-bottom:var(--e-3)">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:14px;border-bottom:1px solid var(--cor-cobertura-trilha)"><div style="width:2px;height:10px;background:var(--cor-cobertura-1)"></div></div>
+            <span data-num style="font-size:var(--t-legenda);color:var(--cor-cobertura-1)">1</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">há 9 h</span>
+          </div>
+          <h3 style="margin:0;font-size:var(--t-corpo-forte);font-weight:var(--p-medio);line-height:var(--l-titulo);color:var(--cor-texto-secundario)">MXRF11 mantém distribuição de R$ 0,10 por cota em julho</h3>
+        </div>
+      </div>
+
+      <div style="width:390px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-4);overflow:hidden;background:var(--cor-superficie)">
+        <div style="display:flex;align-items:center;gap:var(--e-4);padding:var(--e-5);border-bottom:1px solid var(--cor-borda);background:var(--cor-superficie-afundada)">
+          <span style="font-size:var(--t-legenda);color:var(--cor-acento)">← Feed</span>
+          <span data-num style="margin-left:auto;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Feed 7</span>
+        </div>
+        <div style="padding:var(--e-5);border-bottom:1px solid var(--cor-borda-forte)">
+          <h3 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-display);line-height:var(--l-titulo);letter-spacing:var(--k-titulo)">Copom mantém a Selic em 12,25% e retira a referência a cortes graduais</h3>
+          <div style="display:flex;align-items:center;gap:var(--e-4)">
+            <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-forte);color:var(--cor-cobertura-5)">18</span>
+            <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">veículos · 5 enquadramentos</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">há 42 min</span>
+          </div>
+        </div>
+        <div style="padding:var(--e-4) var(--e-5);border-bottom:1px solid var(--cor-borda);display:flex;justify-content:space-between;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">
+          <span>documento</span><span>leitura</span>
+        </div>
+        <div style="padding:var(--e-5);border-bottom:1px solid var(--cor-borda)">
+          <div style="display:flex;align-items:baseline;gap:var(--e-4);margin-bottom:var(--e-3)">
+            <span aria-hidden="true" style="width:8px;height:8px;background:var(--cor-texto-primario)"></span>
+            <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">Banco Central</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">1,00</span>
+          </div>
+          <p style="margin:0 0 var(--e-4);font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-primario)">Comunicado do Copom — 253ª reunião: manutenção da taxa Selic em 12,25% a.a.</p>
+          <div style="position:relative;height:16px;border-left:1px solid var(--cor-borda-forte);border-right:1px solid var(--cor-borda)">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--cor-borda)"></div>
+            <div style="position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:var(--r-pilula);background:var(--cor-texto-primario)"></div>
+          </div>
+        </div>
+        <div style="padding:var(--e-5);border-bottom:1px solid var(--cor-borda)">
+          <div style="display:flex;align-items:baseline;gap:var(--e-4);margin-bottom:var(--e-3)">
+            <span aria-hidden="true" style="width:8px;height:8px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-pilula)"></span>
+            <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">InfoMoney</span>
+            <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">· efeito no investidor</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">0,78</span>
+          </div>
+          <p style="margin:0 0 var(--e-4);font-size:var(--t-legenda);line-height:var(--l-corpo)">Selic parada em 12,25%: o que muda para a renda fixa, os FIIs e a bolsa agora</p>
+          <div style="position:relative;height:16px;border-left:1px solid var(--cor-borda-forte);border-right:1px solid var(--cor-borda)">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--cor-borda)"></div>
+            <div style="position:absolute;top:50%;left:78%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:var(--r-pilula);background:var(--cor-acento)"></div>
+          </div>
+        </div>
+        <div style="padding:var(--e-5)">
+          <div style="display:flex;align-items:baseline;gap:var(--e-4);margin-bottom:var(--e-3)">
+            <span aria-hidden="true" style="width:8px;height:8px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-pilula)"></span>
+            <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">Folha de S.Paulo</span>
+            <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">· política</span>
+            <span data-num style="margin-left:auto;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">0,82</span>
+          </div>
+          <p style="margin:0 0 var(--e-4);font-size:var(--t-legenda);line-height:var(--l-corpo)">Juro parado em patamar alto aumenta o desgaste do governo em ano de orçamento apertado</p>
+          <div style="position:relative;height:16px;border-left:1px solid var(--cor-borda-forte);border-right:1px solid var(--cor-borda)">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:var(--cor-borda)"></div>
+            <div style="position:absolute;top:50%;left:92%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:var(--r-pilula);background:var(--cor-acento)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:390px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-4);overflow:hidden;background:var(--cor-superficie)">
+        <div style="display:flex;align-items:center;gap:var(--e-4);padding:var(--e-5);border-bottom:1px solid var(--cor-borda);background:var(--cor-superficie-afundada)">
+          <span style="font-size:var(--t-legenda);font-weight:var(--p-forte)">Watchlist</span>
+          <span data-num style="margin-left:auto;font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">atraso 15 min</span>
+        </div>
+        <div style="padding:var(--e-7) var(--e-5)">
+          <h3 style="margin:0 0 var(--e-4);font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Nada novo sobre seus ativos hoje</h3>
+          <p style="margin:0 0 var(--e-5);font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">148 fatos entraram nas últimas 24 h e nenhum citou suas oito posições. As séries que você acompanha seguem atualizando.</p>
+          <button type="button" style="width:100%;min-height:44px;border:1px solid var(--cor-borda-forte);border-radius:var(--r-2);background:var(--cor-superficie-elevada);font-size:var(--t-legenda);font-weight:var(--p-forte)">Ver os 12 fatos de macro</button>
+        </div>
+        <div style="padding:var(--e-5);border-top:1px solid var(--cor-borda)">
+          <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Suas posições</span>
+          <div style="display:flex;flex-direction:column;margin-top:var(--e-4)">
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:var(--e-5);align-items:center;min-height:44px;border-bottom:1px solid var(--cor-borda)">
+              <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-medio)">PETR4</span><span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">38,72</span><span data-num style="min-width:64px;text-align:right;font-size:var(--t-legenda);color:var(--cor-positivo)">+1,24%</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:var(--e-5);align-items:center;min-height:44px;border-bottom:1px solid var(--cor-borda)">
+              <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-medio)">VALE3</span><span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">61,05</span><span data-num style="min-width:64px;text-align:right;font-size:var(--t-legenda);color:var(--cor-negativo)">−0,82%</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr auto auto;gap:var(--e-5);align-items:center;min-height:44px">
+              <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-medio)">HGLG11</span><span data-num style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">175,40</span><span data-num style="min-width:64px;text-align:right;font-size:var(--t-legenda);color:var(--cor-positivo)">+0,29%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ ehSistema }}" hint-placeholder-val="{{ false }}">
+  <main style="padding:var(--e-7);max-width:1400px">
+    <h1 style="margin:0 0 var(--e-3);font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);letter-spacing:var(--k-titulo)">Sistema · tokens e biblioteca</h1>
+    <p data-num style="margin:0 0 var(--e-7);font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">libs/ui/tokens/mirante.tokens.css · libs/ui/tokens/mirante.preset.js · valores do tema em exibição</p>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--e-7);margin-bottom:var(--e-8)">
+      <section>
+        <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Cor semântica</h2>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ cores }}" as="c" hint-placeholder-count="12">
+            <div style="display:grid;grid-template-columns:34px 210px minmax(0,1fr);gap:var(--e-5);align-items:center;padding:var(--e-3) 0;border-bottom:1px solid var(--cor-borda)">
+              <span style="{{ c.amostra }}"></span>
+              <span data-num style="font-size:var(--t-legenda)">{{ c.nome }}</span>
+              <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ c.uso }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="display:flex;flex-direction:column;gap:var(--e-7)">
+        <div>
+          <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Escala tipográfica · Archivo display / IBM Plex Sans texto / IBM Plex Mono número</h2>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ tipos }}" as="t" hint-placeholder-count="10">
+              <div style="display:grid;grid-template-columns:170px 56px minmax(0,1fr);gap:var(--e-5);align-items:baseline;padding:var(--e-3) 0;border-bottom:1px solid var(--cor-borda)">
+                <span data-num style="font-size:var(--t-legenda)">{{ t.nome }}</span>
+                <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ t.px }}</span>
+                <span style="{{ t.amostra }}">12,25%</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Espaçamento</h2>
+          <div style="display:flex;flex-direction:column">
+            <sc-for list="{{ espacos }}" as="e" hint-placeholder-count="10">
+              <div style="display:grid;grid-template-columns:80px 52px minmax(0,1fr);gap:var(--e-5);align-items:center;padding:var(--e-2) 0">
+                <span data-num style="font-size:var(--t-legenda)">{{ e.nome }}</span>
+                <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ e.px }}</span>
+                <span style="{{ e.barra }}"></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--e-7)">
+          <div>
+            <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Raio</h2>
+            <div style="display:flex;flex-direction:column;gap:var(--e-4)">
+              <sc-for list="{{ raios }}" as="r" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:44px 90px 52px;gap:var(--e-4);align-items:center">
+                  <span style="{{ r.amostra }}"></span>
+                  <span data-num style="font-size:var(--t-rotulo)">{{ r.nome }}</span>
+                  <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ r.px }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <h2 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Elevação e movimento</h2>
+            <div style="display:flex;flex-direction:column;gap:var(--e-4);margin-bottom:var(--e-5)">
+              <sc-for list="{{ elevacoes }}" as="v" hint-placeholder-count="3">
+                <div style="display:flex;align-items:center;gap:var(--e-4)">
+                  <span style="{{ v.amostra }}"></span>
+                  <span data-num style="font-size:var(--t-rotulo);white-space:nowrap">{{ v.nome }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--e-2)">
+              <sc-for list="{{ duracoes }}" as="d" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:120px 56px minmax(0,1fr);gap:var(--e-4)">
+                  <span data-num style="font-size:var(--t-rotulo)">{{ d.nome }}</span>
+                  <span data-num style="font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">{{ d.valor }}</span>
+                  <span style="font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">{{ d.uso }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <h2 style="margin:0 0 var(--e-5);font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">Biblioteca</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--e-6)">
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Contador de veículos · o pente</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--e-5)">
+          <sc-for list="{{ combExemplos }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex;align-items:flex-end;gap:var(--e-5)">
+              <div style="width:44px;display:flex;align-items:flex-end;gap:2px;height:26px;border-bottom:1px solid var(--cor-cobertura-trilha)">
+                <sc-for list="{{ c.ticks }}" as="k" hint-placeholder-count="4"><div style="{{ k.estilo }}"></div></sc-for>
+              </div>
+              <span data-num style="font-size:var(--t-corpo-forte);font-weight:var(--p-forte);color:{{ c.cor }}">{{ c.n }}</span>
+              <span style="font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">{{ c.unidade }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Chip de entidade · 5 tipos</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:var(--e-3)">
+          <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo)"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">AÇÃO</span><span data-num>VALE3</span></span>
+          <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo)"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">FII</span><span data-num>KNRI11</span></span>
+          <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo)"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">INST</span><span data-num>Banco Central</span></span>
+          <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-borda);border-radius:var(--r-1);background:var(--cor-superficie-elevada);font-size:var(--t-rotulo)"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">PAÍS</span><span data-num>Argentina</span></span>
+          <span style="display:inline-flex;align-items:center;gap:var(--e-3);min-height:26px;padding:0 var(--e-4);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-1);background:var(--cor-acento-suave);font-size:var(--t-rotulo)"><span style="font-family:var(--f-numero);font-size:var(--t-microrrotulo);color:var(--cor-texto-terciario)">SÉRIE</span><span data-num>IPCA 433</span></span>
+        </div>
+        <p style="margin:var(--e-5) 0 0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">O tipo vem escrito. Nenhum chip depende de cor para dizer o que é.</p>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Pílula de itens novos · 3 tamanhos</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--e-4);align-items:flex-start">
+          <button type="button" style="display:flex;align-items:center;gap:var(--e-3);min-height:32px;padding:0 var(--e-2) 0 var(--e-4);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-pilula);background:var(--cor-acento-suave);font-size:var(--t-rotulo)"><span style="font-weight:var(--p-forte)">1 fato novo</span><span style="display:inline-flex;align-items:center;height:22px;padding:0 var(--e-3);border-radius:var(--r-pilula);background:var(--cor-superficie)">Inserir</span></button>
+          <button type="button" style="display:flex;align-items:center;gap:var(--e-4);min-height:36px;padding:0 var(--e-3) 0 var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-pilula);background:var(--cor-acento-suave);font-size:var(--t-legenda)"><span style="font-weight:var(--p-forte)">7 fatos novos</span><span data-num style="color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">2 sobre seus ativos</span><span style="display:inline-flex;align-items:center;height:24px;padding:0 var(--e-4);border-radius:var(--r-pilula);background:var(--cor-superficie);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Inserir</span></button>
+          <button type="button" style="display:flex;align-items:center;gap:var(--e-4);min-height:36px;padding:0 var(--e-3) 0 var(--e-5);border:1px solid var(--cor-acento-contorno);border-radius:var(--r-pilula);background:var(--cor-acento-suave);font-size:var(--t-legenda)"><span data-num style="font-weight:var(--p-forte)">204</span><span style="color:var(--cor-texto-secundario);font-size:var(--t-rotulo)">novos · 3 temas dominam</span><span style="display:inline-flex;align-items:center;height:24px;padding:0 var(--e-4);border-radius:var(--r-pilula);background:var(--cor-superficie);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Ver composição</span></button>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Controle de período e seletor de tema</h3>
+        <div style="display:flex;gap:var(--e-5);flex-wrap:wrap">
+          <div role="group" aria-label="Período" style="display:flex;padding:2px;border:1px solid var(--cor-borda);border-radius:var(--r-2)">
+            <span data-num style="display:inline-flex;align-items:center;min-height:28px;padding:0 var(--e-4);border-radius:var(--r-1);background:var(--cor-superficie-sutil);font-size:var(--t-rotulo);font-weight:var(--p-forte)">24 h</span>
+            <span data-num style="display:inline-flex;align-items:center;min-height:28px;padding:0 var(--e-4);font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">7 d</span>
+            <span data-num style="display:inline-flex;align-items:center;min-height:28px;padding:0 var(--e-4);font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">30 d</span>
+          </div>
+          <div role="group" aria-label="Tema" style="display:flex;padding:2px;border:1px solid var(--cor-borda);border-radius:var(--r-2)">
+            <span style="display:inline-flex;align-items:center;min-height:28px;padding:0 var(--e-4);border-radius:var(--r-1);background:var(--cor-superficie-sutil);font-size:var(--t-rotulo);font-weight:var(--p-forte)">Escuro</span>
+            <span style="display:inline-flex;align-items:center;min-height:28px;padding:0 var(--e-4);font-size:var(--t-rotulo);color:var(--cor-texto-secundario)">Claro</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Painel de explicação · forma compacta</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--e-4)">
+          <div style="display:grid;grid-template-columns:1fr 62px;gap:var(--e-2) var(--e-4);align-items:baseline">
+            <span style="font-size:var(--t-rotulo)">Soma do peso dos veículos</span><span data-num style="text-align:right;font-size:var(--t-legenda);font-weight:var(--p-forte)">13,68</span>
+            <div style="grid-column:1/3;height:4px;background:var(--cor-superficie-afundada);border-radius:var(--r-1)"><div style="width:86%;height:4px;background:var(--cor-acento);border-radius:var(--r-1)"></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 62px;gap:var(--e-2) var(--e-4);align-items:baseline">
+            <span style="font-size:var(--t-rotulo)">Decaimento pelo tempo</span><span data-num style="text-align:right;font-size:var(--t-legenda);font-weight:var(--p-forte)">×0,92</span>
+            <div style="grid-column:1/3;height:4px;background:var(--cor-superficie-afundada);border-radius:var(--r-1)"><div style="width:92%;height:4px;background:var(--cor-acento);border-radius:var(--r-1)"></div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding-top:var(--e-4);border-top:1px solid var(--cor-borda)">
+            <span style="font-size:var(--t-rotulo);font-weight:var(--p-forte)">Produto</span><span data-num style="font-family:var(--f-display);font-size:var(--t-titulo-c);font-weight:var(--p-forte)">57,3</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Sparkline e valor de série</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--e-5)">
+          <sc-for list="{{ series }}" as="s" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:1fr auto 72px;gap:var(--e-5);align-items:center">
+              <span style="font-size:var(--t-legenda);color:var(--cor-texto-secundario)">{{ s.nome }}</span>
+              <span data-num style="font-size:var(--t-legenda);font-weight:var(--p-forte)">{{ s.valor }}</span>
+              <svg viewBox="0 0 72 18" width="72" height="18" aria-hidden="true"><polyline points="{{ s.pontos }}" fill="none" stroke="var(--cor-texto-secundario)" stroke-width="1.5"></polyline></svg>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Badge de saúde de fonte</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--e-4)">
+          <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);background:var(--cor-positivo)"></span>respondendo</span>
+          <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-atencao)"><span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);border:1.5px solid var(--cor-atencao);background:linear-gradient(90deg,var(--cor-atencao) 50%,transparent 50%)"></span>atrasada 38 min</span>
+          <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-atencao)"><span aria-hidden="true" style="width:10px;height:10px;border-radius:var(--r-pilula);border:1.5px solid var(--cor-atencao)"></span>sem resposta há 2 h 40</span>
+          <p style="margin:0;font-size:var(--t-rotulo);color:var(--cor-texto-terciario)">Três formas distintas: cheio, meio, vazio. A cor é reforço, não a informação.</p>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Tabela alternativa · amostra</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:var(--t-legenda)">
+          <thead>
+            <tr>
+              <th scope="col" style="padding:var(--e-2) var(--e-3);text-align:left;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Mês</th>
+              <th scope="col" style="padding:var(--e-2) var(--e-3);text-align:right;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">IPCA</th>
+              <th scope="col" style="padding:var(--e-2) var(--e-3);text-align:right;font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario);border-bottom:1px solid var(--cor-borda);font-weight:var(--p-medio)">Fatos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td data-num style="padding:var(--e-2) var(--e-3);border-bottom:1px solid var(--cor-borda);color:var(--cor-texto-secundario)">jan/26</td><td data-num style="padding:var(--e-2) var(--e-3);text-align:right;border-bottom:1px solid var(--cor-borda)">4,51%</td><td data-num style="padding:var(--e-2) var(--e-3);text-align:right;border-bottom:1px solid var(--cor-borda)">205</td></tr>
+            <tr style="outline:2px solid var(--cor-foco);outline-offset:-2px"><td data-num style="padding:var(--e-2) var(--e-3);border-bottom:1px solid var(--cor-borda);color:var(--cor-texto-primario)">fev/26</td><td data-num style="padding:var(--e-2) var(--e-3);text-align:right;border-bottom:1px solid var(--cor-borda)">4,68%</td><td data-num style="padding:var(--e-2) var(--e-3);text-align:right;border-bottom:1px solid var(--cor-borda)">402</td></tr>
+            <tr><td data-num style="padding:var(--e-2) var(--e-3);color:var(--cor-texto-secundario)">mar/26</td><td data-num style="padding:var(--e-2) var(--e-3);text-align:right">4,55%</td><td data-num style="padding:var(--e-2) var(--e-3);text-align:right">231</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Linha de fato · três níveis de cobertura</h3>
+        <div style="display:flex;flex-direction:column;gap:var(--e-5)">
+          <div>
+            <h4 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-a);font-weight:var(--p-forte);line-height:var(--l-titulo);letter-spacing:var(--k-titulo)">12 ou mais veículos</h4>
+            <p style="margin:var(--e-2) 0 0;font-size:var(--t-corpo);color:var(--cor-texto-secundario)">Título em 22 px, resumo de duas frases, pente cheio.</p>
+          </div>
+          <div>
+            <h4 style="margin:0;font-family:var(--f-display);font-size:var(--t-titulo-b);font-weight:var(--p-forte);line-height:var(--l-titulo)">3 a 7 veículos</h4>
+            <p style="margin:var(--e-2) 0 0;font-size:var(--t-corpo);color:var(--cor-texto-secundario)">Título em 17 px, resumo mantido.</p>
+          </div>
+          <h4 style="margin:0;font-size:var(--t-titulo-c);font-weight:var(--p-medio);color:var(--cor-texto-secundario)">1 ou 2 veículos — título em 15 px, sem resumo</h4>
+        </div>
+      </div>
+
+      <div style="padding:var(--e-5);border:1px solid var(--cor-borda);border-radius:var(--r-3)">
+        <h3 style="margin:0 0 var(--e-5);font-size:var(--t-microrrotulo);letter-spacing:var(--k-rotulo);text-transform:uppercase;color:var(--cor-texto-terciario)">Gráfico grande · legenda e eixos</h3>
+        <p style="margin:0 0 var(--e-5);font-size:var(--t-legenda);line-height:var(--l-corpo);color:var(--cor-texto-secundario)">Canvas com duas escalas. A linha é a série oficial, sempre à esquerda; as barras são contagem de cobertura, sempre à direita. A janela selecionada recebe faixa de fundo, não outra cor de série.</p>
+        <div style="display:flex;flex-direction:column;gap:var(--e-4)">
+          <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:22px;height:2px;background:var(--cor-texto-primario)"></span>série oficial · escala esquerda</span>
+          <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:8px;height:14px;background:var(--cor-cobertura-3)"></span>fatos no mês · escala direita</span>
+          <span style="display:flex;align-items:center;gap:var(--e-4);font-size:var(--t-legenda);color:var(--cor-texto-secundario)"><span aria-hidden="true" style="width:14px;height:14px;background:var(--cor-superficie-sutil);border:1px solid var(--cor-borda)"></span>janela selecionada</span>
+        </div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;tema&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;escuro&quot;,&quot;claro&quot;],&quot;default&quot;:&quot;escuro&quot;,&quot;tsType&quot;:&quot;'escuro' | 'claro'&quot;,&quot;section&quot;:&quot;Aparência&quot;},&quot;densidade&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;compacta&quot;,&quot;confortavel&quot;],&quot;default&quot;:&quot;confortavel&quot;,&quot;tsType&quot;:&quot;'compacta' | 'confortavel'&quot;,&quot;section&quot;:&quot;Aparência&quot;},&quot;meiaVidaHoras&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:2,&quot;max&quot;:24,&quot;step&quot;:1,&quot;default&quot;:5,&quot;unit&quot;:&quot;h&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ranking&quot;}}">
+class Component extends DCLogic {
+  PESOS = {
+    'Valor Econômico': 0.95, 'Reuters Brasil': 0.93, 'Bloomberg Línea': 0.88, 'Broadcast': 0.86,
+    'Estadão': 0.82, 'Folha de S.Paulo': 0.82, 'O Globo': 0.80, 'InfoMoney': 0.78,
+    'Brazil Journal': 0.75, 'Agência Brasil': 0.72, 'Exame': 0.70, 'NeoFeed': 0.68,
+    'CNN Brasil': 0.66, 'Poder360': 0.65, 'Money Times': 0.62, 'Seu Dinheiro': 0.60,
+    'E-Investidor': 0.58, 'Suno Notícias': 0.55, 'Investing Brasil': 0.50, 'Traders Club': 0.46,
+    'Diário do Comércio': 0.44, 'BM&C News': 0.42
+  };
+
+  FATOS = [
+    { id: 'copom', titulo: 'Copom mantém a Selic em 12,25% e retira do comunicado a referência a cortes graduais',
+      resumo: 'A decisão foi unânime e o comunicado trocou "redução gradual" por "cautela adicional diante da assimetria dos riscos". O colegiado voltou a citar a desancoragem das expectativas de médio prazo como razão para não abreviar o ciclo.',
+      tema: 'Política monetária', haMin: 42, carteira: true,
+      ent: [{ tipo: 'INST', rotulo: 'Copom' }, { tipo: 'SÉRIE', rotulo: 'Selic 432' }, { tipo: 'MACRO', rotulo: 'Juros' }],
+      veic: ['Valor Econômico','Reuters Brasil','Bloomberg Línea','Broadcast','Estadão','Folha de S.Paulo','O Globo','InfoMoney','Brazil Journal','Agência Brasil','Exame','NeoFeed','CNN Brasil','Poder360','Money Times','Seu Dinheiro','E-Investidor','Suno Notícias'] },
+    { id: 'ipca', titulo: 'IPCA de junho fica em 0,28% e leva o acumulado em 12 meses a 4,19%',
+      resumo: 'Alimentação no domicílio desacelerou para 0,11% e serviços seguem em 5,3% no ano, o item que mais incomoda o Banco Central. É o quarto mês consecutivo dentro do intervalo de tolerância da meta.',
+      tema: 'Inflação', haMin: 186, carteira: true,
+      ent: [{ tipo: 'INST', rotulo: 'IBGE' }, { tipo: 'SÉRIE', rotulo: 'IPCA 433' }, { tipo: 'MACRO', rotulo: 'Inflação' }],
+      veic: ['Valor Econômico','Reuters Brasil','Broadcast','Estadão','Folha de S.Paulo','O Globo','InfoMoney','Agência Brasil','Exame','CNN Brasil','Money Times','Seu Dinheiro','E-Investidor','Investing Brasil'] },
+    { id: 'petr', titulo: 'Petrobras aprova dividendo extraordinário de R$ 1,42 por ação e antecipa o cronograma de pagamento',
+      resumo: 'O conselho aprovou R$ 18,5 bilhões em proventos extraordinários, com pagamento em duas parcelas a partir de 20 de agosto. A companhia manteve o plano de investimentos de US$ 111 bilhões para o quinquênio.',
+      tema: 'Empresas', haMin: 70, carteira: true,
+      ent: [{ tipo: 'AÇÃO', rotulo: 'PETR4' }, { tipo: 'AÇÃO', rotulo: 'PETR3' }, { tipo: 'MACRO', rotulo: 'Petróleo' }],
+      veic: ['Valor Econômico','Reuters Brasil','Bloomberg Línea','Broadcast','InfoMoney','Brazil Journal','Exame','NeoFeed','Money Times','Seu Dinheiro','Suno Notícias'] },
+    { id: 'dolar', titulo: 'Fed sinaliza pausa longa e o dólar recua a R$ 5,3120 no fechamento do Ptax',
+      resumo: 'O comunicado do Federal Reserve retirou a menção a "novos ajustes" e o dólar caiu 0,62% contra o real. O diferencial de juros voltou ao maior nível desde março, segundo cálculo de mesas locais.',
+      tema: 'Câmbio', haMin: 128, carteira: false,
+      ent: [{ tipo: 'INST', rotulo: 'Fed' }, { tipo: 'SÉRIE', rotulo: 'Ptax 1' }, { tipo: 'PAÍS', rotulo: 'EUA' }],
+      veic: ['Reuters Brasil','Bloomberg Línea','Valor Econômico','Broadcast','InfoMoney','Estadão','O Globo','Exame','CNN Brasil','Money Times','Investing Brasil','Traders Club'] },
+    { id: 'itub', titulo: 'Itaú Unibanco reporta ROE de 22,4% no 2T26 e eleva a projeção de carteira de crédito',
+      resumo: 'O lucro recorrente chegou a R$ 11,8 bilhões, com inadimplência acima de 90 dias estável em 2,7%. O banco revisou o guidance de crescimento da carteira de 6,5% para 8,5% no ano.',
+      tema: 'Bancos', haMin: 355, carteira: true,
+      ent: [{ tipo: 'AÇÃO', rotulo: 'ITUB4' }, { tipo: 'INST', rotulo: 'Itaú Unibanco' }],
+      veic: ['Valor Econômico','Broadcast','Reuters Brasil','InfoMoney','Brazil Journal','Exame','NeoFeed','Money Times','E-Investidor'] },
+    { id: 'ata', titulo: 'Ata do Copom detalha a divergência sobre o balanço de riscos e cita crédito direcionado',
+      resumo: 'O documento registra que parte do colegiado vê o hiato do produto praticamente fechado. A ata também menciona o efeito do crédito direcionado sobre a potência da política monetária.',
+      tema: 'Política monetária', haMin: 1450, carteira: false,
+      ent: [{ tipo: 'INST', rotulo: 'Banco Central' }, { tipo: 'MACRO', rotulo: 'Juros' }],
+      veic: ['Valor Econômico','Reuters Brasil','Broadcast','Estadão','InfoMoney','O Globo','Agência Brasil','Poder360','Exame','Money Times','CNN Brasil','Seu Dinheiro','Suno Notícias','E-Investidor','Investing Brasil','BM&C News'] },
+    { id: 'vale', titulo: 'Vale reduz a projeção de embarques de minério para 2026 após chuvas atípicas no Pará',
+      resumo: 'A companhia passou a trabalhar com 328 a 335 milhões de toneladas, contra 340 milhões antes. O prêmio de qualidade do minério brasileiro segue em US$ 3,10 por tonelada.',
+      tema: 'Empresas', haMin: 300, carteira: true,
+      ent: [{ tipo: 'AÇÃO', rotulo: 'VALE3' }, { tipo: 'MACRO', rotulo: 'Minério' }, { tipo: 'PAÍS', rotulo: 'China' }],
+      veic: ['Valor Econômico','Reuters Brasil','Broadcast','InfoMoney','NeoFeed','Money Times','Investing Brasil'] },
+    { id: 'tesouro', titulo: 'Tesouro publica cronograma de leilões e o IPCA+ 2029 volta a pagar 6,18% de juro real',
+      resumo: 'O prêmio na parte curta da curva subiu 11 pontos-base desde a decisão do Copom. O Tesouro manteve a oferta semanal de NTN-B e ampliou a de LFT.',
+      tema: 'Renda fixa', haMin: 420, carteira: true,
+      ent: [{ tipo: 'TÍTULO', rotulo: 'IPCA+ 2029' }, { tipo: 'INST', rotulo: 'Tesouro Nacional' }],
+      veic: ['Valor Econômico','Broadcast','InfoMoney','Seu Dinheiro','Suno Notícias'] },
+    { id: 'hglg', titulo: 'HGLG11 aprova nova emissão de cotas a R$ 172,30 com direito de preferência em agosto',
+      resumo: 'A oferta busca R$ 1,1 bilhão para quatro galpões logísticos em São Paulo e Minas Gerais. O valor por cota representa desconto de 1,8% sobre o patrimonial.',
+      tema: 'Fundos imobiliários', haMin: 240, carteira: true,
+      ent: [{ tipo: 'FII', rotulo: 'HGLG11' }, { tipo: 'MACRO', rotulo: 'Logística' }],
+      veic: ['InfoMoney','Suno Notícias','Money Times'] },
+    { id: 'argentina', titulo: 'Argentina fecha revisão com o FMI e o risco-país cai a 512 pontos',
+      resumo: 'O desembolso de US$ 2,1 bilhões foi liberado após acordo sobre metas de reservas. Exportadores brasileiros de manufaturados acompanham o efeito sobre a demanda do país.',
+      tema: 'Internacional', haMin: 660, carteira: false,
+      ent: [{ tipo: 'PAÍS', rotulo: 'Argentina' }, { tipo: 'INST', rotulo: 'FMI' }],
+      veic: ['Reuters Brasil','Bloomberg Línea','Valor Econômico','Folha de S.Paulo','Poder360','CNN Brasil'] },
+    { id: 'bbas', titulo: 'Banco do Brasil anuncia recompra de até R$ 1,5 bilhão em ações',
+      resumo: 'O programa vale por 18 meses e alcança até 3% do capital em circulação. O banco reafirmou o payout de 45% para o exercício.',
+      tema: 'Bancos', haMin: 780, carteira: true,
+      ent: [{ tipo: 'AÇÃO', rotulo: 'BBAS3' }, { tipo: 'INST', rotulo: 'Banco do Brasil' }],
+      veic: ['Broadcast','InfoMoney','Money Times','E-Investidor','Suno Notícias'] },
+    { id: 'industria', titulo: 'Produção industrial recua 0,4% em maio e acumula queda de 1,1% no trimestre',
+      resumo: 'Bens de capital caíram 1,9% e puxaram o resultado, segundo o IBGE. O setor extrativo foi o único com contribuição positiva no mês.',
+      tema: 'Atividade', haMin: 720, carteira: false,
+      ent: [{ tipo: 'INST', rotulo: 'IBGE' }, { tipo: 'SÉRIE', rotulo: 'IBC-Br 24363' }],
+      veic: ['Agência Brasil','Valor Econômico','Broadcast','Poder360'] },
+    { id: 'wege', titulo: 'Conselho da WEG aprova R$ 480 milhões em nova fábrica de motores em Santa Catarina',
+      resumo: 'A unidade em Jaraguá do Sul deve começar a operar no segundo semestre de 2027.',
+      tema: 'Empresas', haMin: 505, carteira: true,
+      ent: [{ tipo: 'AÇÃO', rotulo: 'WEGE3' }],
+      veic: ['Valor Econômico','Diário do Comércio'] },
+    { id: 'mxrf', titulo: 'MXRF11 mantém distribuição de R$ 0,10 por cota em julho',
+      resumo: 'É o décimo mês seguido no mesmo patamar.',
+      tema: 'Fundos imobiliários', haMin: 545, carteira: false,
+      ent: [{ tipo: 'FII', rotulo: 'MXRF11' }],
+      veic: ['Suno Notícias'] }
+  ];
+
+  FILA = [
+    { titulo: 'Focus: mediana do IPCA 2026 cai a 4,05% e a de 2027 vai a 3,80%', n: 9, tema: 'Inflação', carteira: true },
+    { titulo: 'Caged registra 168 mil vagas formais em junho', n: 6, tema: 'Atividade', carteira: false },
+    { titulo: 'Klabin aprova investimento em nova máquina de papel em Ortigueira', n: 4, tema: 'Empresas', carteira: false },
+    { titulo: 'KNRI11 anuncia venda de galpão em Cajamar com ganho de capital de R$ 62 milhões', n: 3, tema: 'Fundos imobiliários', carteira: true },
+    { titulo: 'Balança comercial fecha julho com superávit de US$ 6,4 bilhões', n: 5, tema: 'Comércio externo', carteira: false },
+    { titulo: 'Bradesco eleva projeção de PIB de 2,0% para 2,3% em 2026', n: 7, tema: 'Atividade', carteira: false },
+    { titulo: 'CVM abre consulta sobre regras de oferta de FIIs para investidor comum', n: 2, tema: 'Regulação', carteira: false }
+  ];
+
+  SERIES = [
+    { nome: 'Selic meta', valor: '12,25%', codigo: '432', quando: 'há 42 min', pts: [15.0,14.75,14.25,13.75,13.25,12.75,12.25,12.25], sobe: false },
+    { nome: 'IPCA 12 meses', valor: '4,19%', codigo: '433', quando: 'há 3 h', pts: [4.68,4.55,4.40,4.31,4.25,4.19,4.19,4.19], sobe: false },
+    { nome: 'Dólar Ptax venda', valor: '5,3120', codigo: '1', quando: 'há 2 h', pts: [5.52,5.48,5.41,5.44,5.38,5.35,5.34,5.31], sobe: false },
+    { nome: 'IBC-Br', valor: '+0,31%', codigo: '24363', quando: 'há 1 d', pts: [0.1,0.35,0.22,0.4,0.18,0.05,0.24,0.31], sobe: true }
+  ];
+
+  CARTEIRA = [
+    { ticker: 'PETR4', preco: '38,72', v: 1.24 }, { ticker: 'VALE3', preco: '61,05', v: -0.82 },
+    { ticker: 'ITUB4', preco: '39,18', v: 0.46 }, { ticker: 'BBAS3', preco: '28,90', v: 0.11 },
+    { ticker: 'WEGE3', preco: '52,34', v: -0.35 }, { ticker: 'HGLG11', preco: '175,40', v: 0.29 },
+    { ticker: 'KNRI11', preco: '164,82', v: -0.14 }, { ticker: 'IPCA+ 2029', preco: 'IPCA+6,18%', v: 0.11 }
+  ];
+
+  FONTES_ALERTA = [
+    { nome: 'Agência Brasil', estado: 'sem resposta há 2 h 40', nivel: 'fora' },
+    { nome: 'Diário do Comércio', estado: 'coleta atrasada 38 min', nivel: 'atrasada' }
+  ];
+
+  state = { tela: 'feed', tema: null, densidade: null, focoDemo: false, periodo: '24h', fila: 7, inseridos: 0 };
+
+  get tema() { return this.state.tema || this.props.tema || 'escuro'; }
+  get densidade() { return this.state.densidade || this.props.densidade || 'compacta'; }
+  get meiaVida() { return this.props.meiaVidaHoras || 6; }
+
+  haRel(min) {
+    if (min < 60) return 'há ' + min + ' min';
+    if (min < 1440) { const h = Math.floor(min / 60); const m = min % 60; return m >= 10 ? 'há ' + h + ' h ' + m : 'há ' + h + ' h'; }
+    const d = Math.floor(min / 1440);
+    return d === 1 ? 'há 1 dia' : 'há ' + d + ' dias';
+  }
+
+  faixa(n) { return n >= 12 ? 5 : n >= 8 ? 4 : n >= 5 ? 3 : n >= 3 ? 2 : 1; }
+  corFaixa(n) { return 'var(--cor-cobertura-' + this.faixa(n) + ')'; }
+
+  get pesos() {
+    return this.state.pesos || { veiculo: 1, cobertura: 1, meiaVida: this.props.meiaVidaHoras || 6, watch: 1.6 };
+  }
+
+  mudarPeso(chave) {
+    return (ev) => {
+      const v = parseFloat(ev.target.value);
+      const p = Object.assign({}, this.pesos);
+      p[chave] = v;
+      this.setState({ pesos: p });
+    };
+  }
+
+  escoreDe(f) {
+    const p = this.pesos;
+    const soma = f.veic.reduce((s, v) => s + Math.pow(this.PESOS[v] || 0.5, p.veiculo), 0);
+    const cobertura = 1 + Math.log(f.veic.length) * p.cobertura;
+    const decaimento = Math.pow(0.5, (f.haMin / 60) / p.meiaVida);
+    const watch = f.carteira ? p.watch : 1;
+    return { soma, cobertura, decaimento, watch, total: soma * cobertura * decaimento * watch };
+  }
+
+  linhaFato(f) {
+    const e = this.escoreDe(f);
+    const n = f.veic.length;
+    const faixa = this.faixa(n);
+    const max = 19;
+    const ticks = f.veic.slice(0, max).map((v, i) => {
+      const p = this.PESOS[v] || 0.5;
+      const alt = Math.round(9 + p * 17);
+      const atraso = Math.min(1, (i * 9) / 180);
+      return { estilo: 'width:2px;flex:0 0 2px;height:' + alt + 'px;background:var(--cor-cobertura-' + faixa + ');opacity:' + (1 - atraso * 0.55).toFixed(2) };
+    });
+    return {
+      id: f.id, titulo: f.titulo, resumo: f.resumo, tema: f.tema, n: n,
+      unidade: n === 1 ? 'veículo' : 'veículos',
+      ticks, corContagem: this.corFaixa(n),
+      penteRotulo: n + (n === 1 ? ' veículo cobriu este fato' : ' veículos cobriram este fato'),
+      ha: this.haRel(f.haMin), entidades: f.ent, naCarteira: !!f.carteira,
+      escore: e.total.toFixed(1),
+      ehA: n >= 8, ehB: n >= 3 && n < 8, ehC: n < 3,
+      temResumo: n >= 3,
+      abrir: () => this.setState({ tela: 'fato', fatoAberto: f.id }),
+      destacar: () => {},
+      teclado: (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); this.setState({ tela: 'fato', fatoAberto: f.id }); } }
+    };
+  }
+
+  fatosVisiveis() {
+    const extra = this.FILA.slice(0, this.state.inseridos).map((x, i) => ({
+      id: 'novo' + i, titulo: x.titulo, resumo: 'Item inserido pela pílula de novidades. Entrou na ordenação com o mesmo cálculo dos demais fatos.',
+      tema: x.tema, haMin: 4 + i * 3, carteira: x.carteira,
+      ent: [{ tipo: 'MACRO', rotulo: x.tema }],
+      veic: Object.keys(this.PESOS).slice(0, x.n)
+    }));
+    return this.FATOS.concat(extra).map(f => ({ f, e: this.escoreDe(f).total })).sort((a, b) => b.e - a.e).map(x => x.f);
+  }
+
+  sparkline(pts) {
+    const min = Math.min.apply(null, pts), max = Math.max.apply(null, pts);
+    const amp = max - min || 1;
+    return pts.map((p, i) => (i * (72 / (pts.length - 1))).toFixed(1) + ',' + (16 - ((p - min) / amp) * 14).toFixed(1)).join(' ');
+  }
+
+  renderVals() {
+    const tela = this.state.tela;
+    const nomes = [['feed','Feed'],['chegada','Chegada'],['ranking','Ranking'],['fato','Fato aberto'],['correlacao','Correlação'],['watchlist','Watchlist'],['fontes','Fontes'],['estados','Estados'],['mobile','Mobile'],['sistema','Sistema']];
+    const fila = this.state.fila;
+    const naCarteiraFila = this.FILA.slice(0, fila).filter(x => x.carteira).length;
+    return Object.assign(this.valsB(), {
+      tema: this.tema, densidade: this.densidade,
+      ehEscuro: this.tema === 'escuro', ehClaro: this.tema === 'claro',
+      irEscuro: () => this.setState({ tema: 'escuro' }), irClaro: () => this.setState({ tema: 'claro' }),
+      focoDemo: this.state.focoDemo ? 'sim' : 'nao',
+      focoRotulo: this.state.focoDemo ? 'visível' : 'oculto',
+      alternarFoco: () => this.setState(s => ({ focoDemo: !s.focoDemo })),
+      telas: nomes.map(([id, rotulo]) => ({ id, rotulo, ativo: tela === id, inativo: tela !== id, ir: () => this.setState({ tela: id }) })),
+      ehFeed: tela === 'feed',
+      periodos: [['24h','24 h'],['7d','7 d'],['30d','30 d']].map(([id, rotulo]) => ({ rotulo, ativo: this.state.periodo === id, inativo: this.state.periodo !== id, ir: () => this.setState({ periodo: id }) })),
+      irRanking: () => this.setState({ tela: 'ranking' }),
+      irFontes: () => this.setState({ tela: 'fontes' }),
+      temFila: fila > 0,
+      filaRotulo: fila === 1 ? '1 fato novo' : fila + ' fatos novos',
+      filaDetalhe: naCarteiraFila > 0 ? naCarteiraFila + ' sobre seus ativos' : 'nenhum sobre seus ativos',
+      inserirNovos: () => this.setState(s => ({ inseridos: s.inseridos + s.fila, fila: 0 })),
+      fatos: this.fatosVisiveis().map(f => this.linhaFato(f)),
+      totalFatos: 148 + this.state.inseridos,
+      series: this.SERIES.map(s => ({ nome: s.nome, valor: s.valor, codigo: s.codigo, quando: s.quando, pontos: this.sparkline(s.pts), cor: 'var(--cor-texto-secundario)', abrir: () => this.setState({ tela: 'correlacao' }) })),
+      carteira: this.CARTEIRA.map(a => ({ ticker: a.ticker, preco: a.preco, variacao: (a.v > 0 ? '+' : a.v < 0 ? '−' : '') + Math.abs(a.v).toFixed(2).replace('.', ',') + '%', cor: a.v > 0 ? 'var(--cor-positivo)' : a.v < 0 ? 'var(--cor-negativo)' : 'var(--cor-texto-secundario)' })),
+      fontesAlerta: this.FONTES_ALERTA.map(v => ({ nome: v.nome, estado: v.estado,
+        marca: v.nivel === 'fora'
+          ? 'display:block;width:10px;height:10px;border:1.5px solid var(--cor-atencao);border-radius:var(--r-pilula);background:transparent'
+          : 'display:block;width:10px;height:10px;border:1.5px solid var(--cor-atencao);border-radius:var(--r-pilula);background:linear-gradient(90deg,var(--cor-atencao) 50%,transparent 50%)' }))
+    });
+  }
+
+  ENQ = [
+    { v: 'Banco Central', peso: 1, titulo: 'Comunicado do Copom — 253ª reunião: manutenção da taxa Selic em 12,25% a.a.', foco: 'Documento', pos: 0, haMin: 42, oficial: true },
+    { v: 'Reuters Brasil', peso: 0.93, titulo: 'Banco Central do Brasil mantém juro em 12,25% e diz que inflação exige cautela adicional', foco: 'Decisão', pos: 8, haMin: 43 },
+    { v: 'Agência Brasil', peso: 0.72, titulo: 'Copom mantém taxa básica de juros em 12,25% ao ano pela terceira vez', foco: 'Decisão', pos: 11, haMin: 47 },
+    { v: 'Broadcast', peso: 0.86, titulo: 'Copom retira do comunicado a expressão "redução gradual" e cita assimetria de riscos', foco: 'Documento', pos: 19, haMin: 44 },
+    { v: 'Valor Econômico', peso: 0.95, titulo: 'Sem sinal de corte: Copom endurece o texto e joga o próximo ajuste para depois de setembro', foco: 'Interpretação', pos: 58, haMin: 51 },
+    { v: 'Bloomberg Línea', peso: 0.88, titulo: 'Copom mantém Selic e mercado passa a projetar o primeiro corte só em novembro', foco: 'Interpretação', pos: 52, haMin: 55 },
+    { v: 'InfoMoney', peso: 0.78, titulo: 'Selic parada em 12,25%: o que muda para a renda fixa, os FIIs e a bolsa agora', foco: 'Efeito no investidor', pos: 78, haMin: 58 },
+    { v: 'Seu Dinheiro', peso: 0.60, titulo: 'Com Selic em 12,25%, vale mais a pena o prefixado ou o IPCA+? Veja onde está o prêmio', foco: 'Efeito no investidor', pos: 88, haMin: 66 },
+    { v: 'Suno Notícias', peso: 0.55, titulo: 'Juro alto por mais tempo favorece bancos e pressiona fundos de tijolo, avaliam gestoras', foco: 'Efeito no investidor', pos: 84, haMin: 71 },
+    { v: 'Folha de S.Paulo', peso: 0.82, titulo: 'Juro parado em patamar alto aumenta o desgaste do governo em ano de orçamento apertado', foco: 'Política', pos: 92, haMin: 62 },
+    { v: 'Poder360', peso: 0.65, titulo: 'Decisão do Copom reacende atrito entre Planalto e Banco Central sobre ritmo de cortes', foco: 'Política', pos: 95, haMin: 69 },
+    { v: 'Money Times', peso: 0.62, titulo: 'Copom mantém Selic em 12,25%; leia o comunicado na íntegra', foco: 'Documento', pos: 4, haMin: 49 },
+    { v: 'Exame', peso: 0.70, titulo: 'Copom mantém Selic: leia a análise de sete casas sobre o próximo passo do BC', foco: 'Interpretação', pos: 64, haMin: 74 }
+  ];
+
+  FOCOS = [
+    { nome: 'Documento', n: 3, desc: 'reproduz o comunicado' },
+    { nome: 'Decisão', n: 2, desc: 'relata o resultado' },
+    { nome: 'Interpretação', n: 3, desc: 'projeta o próximo passo' },
+    { nome: 'Efeito no investidor', n: 3, desc: 'traduz para a carteira' },
+    { nome: 'Política', n: 2, desc: 'lê pelo eixo Planalto–BC' }
+  ];
+
+  valsB() {
+    const tela = this.state.tela;
+    const p = this.pesos;
+    const fatoId = this.state.fatoAberto || 'copom';
+    const fato = this.FATOS.filter(f => f.id === fatoId)[0] || this.FATOS[0];
+    const e = this.escoreDe(fato);
+    const ordenados = this.fatosVisiveis().slice(0, 8).map((f, i) => {
+      const ee = this.escoreDe(f);
+      const max = this.escoreDe(this.fatosVisiveis()[0]).total;
+      return {
+        posicao: (i + 1) + '', titulo: f.titulo, n: f.veic.length, ha: this.haRel(f.haMin),
+        escore: ee.total.toFixed(1), largura: 'width:' + Math.max(4, (ee.total / max) * 100).toFixed(1) + '%;height:6px;background:' + this.corFaixa(f.veic.length) + ';border-radius:var(--r-1)',
+        naCarteira: !!f.carteira, semCarteira: !f.carteira,
+        selecionado: f.id === fatoId, naoSelecionado: f.id !== fatoId,
+        escolher: () => this.setState({ fatoAberto: f.id })
+      };
+    });
+    const partes = [
+      { rotulo: 'Soma do peso dos veículos', valor: e.soma.toFixed(2), nota: fato.veic.length + ' veículos, peso individual de 0,42 a 0,95', largura: Math.min(100, (e.soma / 12) * 100) },
+      { rotulo: 'Amplitude de cobertura', valor: '×' + e.cobertura.toFixed(2), nota: '1 + ln(' + fato.veic.length + ') × ' + p.cobertura.toFixed(2), largura: Math.min(100, (e.cobertura / 5) * 100) },
+      { rotulo: 'Decaimento pelo tempo', valor: '×' + e.decaimento.toFixed(2), nota: this.haRel(fato.haMin) + ' · meia-vida de ' + p.meiaVida + ' h', largura: e.decaimento * 100 },
+      { rotulo: 'Casamento com a watchlist', valor: '×' + e.watch.toFixed(2), nota: fato.carteira ? 'menciona PETR4 e Selic, ambos na sua lista' : 'nenhum ativo da sua lista é mencionado', largura: (e.watch / 3) * 100 }
+    ];
+    const totalFoco = this.ENQ.length - 1;
+    return Object.assign({
+      ehChegada: tela === 'chegada', ehRanking: tela === 'ranking', ehFato: tela === 'fato',
+      pesoVeiculo: p.veiculo.toFixed(2), pesoCobertura: p.cobertura.toFixed(2), pesoMeiaVida: p.meiaVida + ' h', pesoWatch: '×' + p.watch.toFixed(2),
+      pesoVeiculoV: p.veiculo, pesoCoberturaV: p.cobertura, pesoMeiaVidaV: p.meiaVida, pesoWatchV: p.watch,
+      mudarVeiculo: this.mudarPeso('veiculo'), mudarCobertura: this.mudarPeso('cobertura'),
+      mudarMeiaVida: this.mudarPeso('meiaVida'), mudarWatch: this.mudarPeso('watch'),
+      restaurarPesos: () => this.setState({ pesos: { veiculo: 1, cobertura: 1, meiaVida: 6, watch: 1.6 } }),
+      ranking: ordenados,
+      partes: partes.map(x => ({ rotulo: x.rotulo, valor: x.valor, nota: x.nota, barra: 'width:' + x.largura.toFixed(1) + '%;height:4px;background:var(--cor-acento);border-radius:var(--r-1)' })),
+      produto: e.total.toFixed(1),
+      fatoTitulo: fato.titulo, fatoResumo: fato.resumo, fatoTema: fato.tema, fatoHa: this.haRel(fato.haMin),
+      fatoN: fato.veic.length, fatoEnt: fato.ent,
+      fatoTicks: this.linhaFato(fato).ticks,
+      enq: this.ENQ.map(x => ({
+        veiculo: x.v, peso: x.peso.toFixed(2), titulo: x.titulo, foco: x.foco, ha: this.haRel(x.haMin),
+        oficial: !!x.oficial, imprensa: !x.oficial,
+        marcador: 'position:absolute;top:50%;left:' + x.pos + '%;transform:translate(-50%,-50%);width:9px;height:9px;border-radius:var(--r-pilula);background:' + (x.oficial ? 'var(--cor-texto-primario)' : 'var(--cor-acento)') + ';border:1px solid var(--cor-superficie)'
+      })),
+      focos: this.FOCOS.map(f => ({ nome: f.nome, n: f.n, desc: f.desc, prop: Math.round((f.n / totalFoco) * 100) + '%',
+        barra: 'width:' + Math.round((f.n / totalFoco) * 100) + '%;height:6px;background:var(--cor-cobertura-3);border-radius:var(--r-1)' })),
+      filaPreview: this.FILA.slice(0, 3).map(x => ({ titulo: x.titulo, n: x.n, cor: this.corFaixa(x.n) }))
+    }, this.valsC());
+  }
+
+  MESES = ['fev/25','mar/25','abr/25','mai/25','jun/25','jul/25','ago/25','set/25','out/25','nov/25','dez/25','jan/26','fev/26','mar/26','abr/26','mai/26','jun/26','jul/26'];
+  IPCA = [5.06,5.48,5.53,5.32,5.35,5.23,5.17,4.98,4.87,4.76,4.62,4.51,4.68,4.55,4.40,4.31,4.25,4.19];
+  VOL = [210,268,291,240,232,255,198,186,244,176,168,205,402,231,212,198,226,289];
+
+  JANELA = [
+    { titulo: 'Governo e Banco Central divergem publicamente sobre o horizonte relevante da meta', n: 21, dia: '11' },
+    { titulo: 'IPCA de janeiro surpreende com 0,64% e reabre a discussão sobre a meta contínua', n: 18, dia: '11' },
+    { titulo: 'Focus eleva a projeção de inflação de 2026 pela sexta semana consecutiva', n: 14, dia: '17' },
+    { titulo: 'Copom antecipa reunião extraordinária, diz reportagem; BC nega', n: 9, dia: '19' },
+    { titulo: 'Reajuste de energia elétrica entra na conta da inflação de fevereiro', n: 7, dia: '24' }
+  ];
+
+  ATIVOS = [
+    { ticker: 'PETR4', tipo: 'AÇÃO', nome: 'Petrobras PN', preco: '38,72', v: 1.24, fatos: 4, cob: [2,1,4,3,1,0,4] },
+    { ticker: 'VALE3', tipo: 'AÇÃO', nome: 'Vale ON', preco: '61,05', v: -0.82, fatos: 3, cob: [1,2,1,0,3,2,3] },
+    { ticker: 'ITUB4', tipo: 'AÇÃO', nome: 'Itaú Unibanco PN', preco: '39,18', v: 0.46, fatos: 2, cob: [0,1,1,2,1,1,2] },
+    { ticker: 'BBAS3', tipo: 'AÇÃO', nome: 'Banco do Brasil ON', preco: '28,90', v: 0.11, fatos: 1, cob: [1,0,0,1,0,1,1] },
+    { ticker: 'WEGE3', tipo: 'AÇÃO', nome: 'WEG ON', preco: '52,34', v: -0.35, fatos: 1, cob: [0,0,1,0,0,0,1] },
+    { ticker: 'HGLG11', tipo: 'FII', nome: 'CSHG Logística', preco: '175,40', v: 0.29, fatos: 2, cob: [0,1,0,1,2,0,2] },
+    { ticker: 'KNRI11', tipo: 'FII', nome: 'Kinea Renda Imobiliária', preco: '164,82', v: -0.14, fatos: 0, cob: [0,0,1,0,0,0,0] },
+    { ticker: 'IPCA+ 2029', tipo: 'TÍTULO', nome: 'Tesouro IPCA+ 2029', preco: 'IPCA+6,18%', v: 0.11, fatos: 1, cob: [1,0,1,0,1,0,1] }
+  ];
+
+  ESTADO_FONTE = { 'Agência Brasil': 'fora', 'Diário do Comércio': 'atrasada' };
+
+  valsC() {
+    const tela = this.state.tela;
+    const sel = this.state.mes == null ? 12 : this.state.mes;
+    const linha = this.state.linhaTabela == null ? sel : this.state.linhaTabela;
+    const tabela = this.MESES.map((m, i) => ({
+      mes: m, ipca: this.IPCA[i].toFixed(2).replace('.', ',') + '%',
+      dipca: (i === 0 ? '—' : (this.IPCA[i] - this.IPCA[i - 1] >= 0 ? '+' : '−') + Math.abs(this.IPCA[i] - this.IPCA[i - 1]).toFixed(2).replace('.', ',')),
+      vol: this.VOL[i] + '',
+      dvol: (i === 0 ? '—' : (this.VOL[i] - this.VOL[i - 1] >= 0 ? '+' : '−') + Math.abs(Math.round(((this.VOL[i] - this.VOL[i - 1]) / this.VOL[i - 1]) * 100)) + '%'),
+      pico: this.VOL[i] >= 280 ? 'pico' : '',
+      selecionada: i === sel, naoSelecionada: i !== sel,
+      foco: i === linha ? 0 : -1,
+      escolher: () => this.setState({ mes: i, linhaTabela: i }),
+      teclado: (ev) => {
+        const k = ev.key;
+        if (k === 'ArrowDown' || k === 'ArrowUp' || k === 'Home' || k === 'End') {
+          ev.preventDefault();
+          const alvo = k === 'ArrowDown' ? Math.min(17, i + 1) : k === 'ArrowUp' ? Math.max(0, i - 1) : k === 'Home' ? 0 : 17;
+          this.setState({ linhaTabela: alvo }, () => {
+            const el = document.querySelector('[data-linha-tabela="' + alvo + '"]');
+            if (el) el.focus();
+          });
+        } else if (k === 'Enter' || k === ' ') { ev.preventDefault(); this.setState({ mes: i, linhaTabela: i }); }
+      }
+    }));
+    const fontes = Object.keys(this.PESOS).concat(['Rádio Bandeirantes Economia', 'Agência iNFRA']).map((n, i) => {
+      const st = this.ESTADO_FONTE[n] || 'ativa';
+      return {
+        nome: n, peso: (this.PESOS[n] || 0.4).toFixed(2),
+        categoria: i % 4 === 0 ? 'Jornal' : i % 4 === 1 ? 'Agência' : i % 4 === 2 ? 'Especializado' : 'Institucional',
+        ultimo: st === 'fora' ? 'há 2 h 40' : st === 'atrasada' ? 'há 38 min' : this.haRel(2 + (i * 3) % 26),
+        latencia: (40 + (i * 17) % 180) + ' s',
+        rotulo: st === 'fora' ? 'sem resposta' : st === 'atrasada' ? 'atrasada' : 'respondendo',
+        ativa: st === 'ativa', atrasada: st === 'atrasada', fora: st === 'fora'
+      };
+    });
+    const we = this.state.watchEstado || 'dados';
+    return Object.assign({
+      ehCorrelacao: tela === 'correlacao', ehWatchlist: tela === 'watchlist', ehFontes: tela === 'fontes',
+      refGrafico: (el) => { this.canvas = el; },
+      cliqueGrafico: (ev) => {
+        const c = this.canvas; if (!c) return;
+        const r = c.getBoundingClientRect();
+        const x = ev.clientX - r.left;
+        const esq = 46, dir = 54;
+        const passo = (r.width - esq - dir) / 18;
+        const i = Math.max(0, Math.min(17, Math.floor((x - esq) / passo)));
+        this.setState({ mes: i, linhaTabela: i });
+      },
+      mesSel: this.MESES[sel], volSel: this.VOL[sel] + '', ipcaSel: this.IPCA[sel].toFixed(2).replace('.', ',') + '%',
+      tabela,
+      janela: this.JANELA.map(j => ({ titulo: j.titulo, n: j.n, cor: this.corFaixa(j.n), dia: j.dia,
+        entrar: () => this.setState({ destaque: j.dia }), sair: () => this.setState({ destaque: null }) })),
+      limparJanela: () => this.setState({ mes: null, linhaTabela: null }),
+      fontes, fontesAtivas: fontes.filter(f => f.ativa).length + '',
+      ativos: this.ATIVOS.map(a => ({
+        ticker: a.ticker, tipo: a.tipo, nome: a.nome, preco: a.preco,
+        variacao: (a.v > 0 ? '+' : a.v < 0 ? '−' : '') + Math.abs(a.v).toFixed(2).replace('.', ',') + '%',
+        cor: a.v > 0 ? 'var(--cor-positivo)' : a.v < 0 ? 'var(--cor-negativo)' : 'var(--cor-texto-secundario)',
+        fatos: a.fatos + '', temFatos: a.fatos > 0, semFatos: a.fatos === 0,
+        pontos: this.sparkline(a.cob)
+      })),
+      watchDados: we === 'dados', watchVazio: we === 'vazio', watchNada: we === 'nada',
+      irDados: () => this.setState({ watchEstado: 'dados' }),
+      irVazio: () => this.setState({ watchEstado: 'vazio' }),
+      irNada: () => this.setState({ watchEstado: 'nada' }),
+      wDados: we === 'dados', wVazio: we === 'vazio', wNada: we === 'nada'
+    }, this.valsD());
+  }
+
+  valsD() {
+    const tela = this.state.tela;
+    const cores = [
+      ['superficie', 'fundo da tela'], ['superficie-elevada', 'linha em hover, cartão'],
+      ['superficie-afundada', 'faixa lateral, cabeçalho'], ['superficie-sutil', 'estado pressionado'],
+      ['borda', 'divisor de linha'], ['borda-forte', 'moldura de controle'],
+      ['texto-primario', 'título e número'], ['texto-secundario', 'resumo e rótulo'],
+      ['texto-terciario', 'metadado'], ['acento', 'link, seleção, watchlist'],
+      ['acento-suave', 'fundo de seleção'], ['acento-contorno', 'moldura de seleção'],
+      ['positivo', 'variação acima de zero'], ['negativo', 'variação abaixo de zero'],
+      ['atencao', 'fonte fora do ar, pico'], ['foco', 'anel de foco de teclado'],
+      ['cobertura-trilha', 'capacidade vazia do pente'], ['cobertura-1', '1 a 2 veículos'],
+      ['cobertura-2', '3 a 4 veículos'], ['cobertura-3', '5 a 7 veículos'],
+      ['cobertura-4', '8 a 11 veículos'], ['cobertura-5', '12 ou mais veículos']
+    ];
+    const tipos = [
+      ['t-microrrotulo', '10 px', 'rótulo em caixa alta'], ['t-rotulo', '11 px', 'metadado, atalho'],
+      ['t-legenda', '12 px', 'tabela e lista densa'], ['t-corpo', '13 px', 'resumo de fato'],
+      ['t-corpo-forte', '14 px', 'valor de série'], ['t-titulo-c', '15 px', 'fato de baixa cobertura'],
+      ['t-titulo-b', '17 px', 'fato de cobertura média'], ['t-titulo-a', '22 px', 'fato de alta cobertura'],
+      ['t-display', '30 px', 'título de fato aberto'], ['t-display-grande', '44 px', 'número único de destaque']
+    ];
+    return {
+      ehEstados: tela === 'estados', ehMobile: tela === 'mobile', ehSistema: tela === 'sistema',
+      cores: cores.map(([n, uso]) => ({ nome: '--cor-' + n, uso, amostra: 'width:34px;height:34px;border-radius:var(--r-2);border:1px solid var(--cor-borda);background:var(--cor-' + n + ')' })),
+      espacos: [['e-1','2'],['e-2','4'],['e-3','6'],['e-4','8'],['e-5','12'],['e-6','16'],['e-7','24'],['e-8','32'],['e-9','48'],['e-10','64']].map(([n, px]) => ({ nome: '--' + n, px: px + ' px', barra: 'height:8px;width:var(--' + n + ');background:var(--cor-cobertura-3)' })),
+      tipos: tipos.map(([n, px, uso]) => ({ nome: '--' + n, px, uso, amostra: 'font-size:var(--' + n + ');font-weight:var(--p-forte);font-family:var(--f-display);line-height:1.1' })),
+      raios: [['r-0','0'],['r-1','2'],['r-2','4'],['r-3','8'],['r-4','12'],['r-pilula','999']].map(([n, px]) => ({ nome: '--' + n, px: px + ' px', amostra: 'width:44px;height:26px;border:1px solid var(--cor-borda-forte);border-radius:var(--' + n + ')' })),
+      duracoes: [['d-instantaneo','90 ms','hover, pressionar'],['d-rapido','160 ms','troca de estado'],['d-medio','240 ms','entrada da pílula'],['d-lento','420 ms','troca de tela']].map(([n, v, uso]) => ({ nome: '--' + n, valor: v, uso })),
+      elevacoes: [['ev-1','linha destacada'],['ev-2','pílula de novos'],['ev-3','painel sobreposto']].map(([n, uso]) => ({ nome: '--' + n, uso, amostra: 'width:100%;height:44px;border-radius:var(--r-2);background:var(--cor-superficie-elevada);border:1px solid var(--cor-borda);box-shadow:var(--' + n + ')' })),
+      esqueletos: [1, 2, 3, 4].map(i => ({ largura: 'height:11px;border-radius:var(--r-1);background:var(--cor-superficie-sutil);width:' + (94 - i * 9) + '%;animation:mirante-esqueleto 1.6s var(--c-padrao) infinite' })),
+      combExemplos: [1, 3, 7, 12, 18].map(n => {
+        const faixa = this.faixa(n);
+        return {
+          n: n + '', unidade: n === 1 ? 'veículo' : 'veículos', cor: this.corFaixa(n),
+          ticks: Array.apply(null, { length: n }).map((_, i) => ({
+            estilo: 'width:2px;flex:0 0 2px;height:' + (10 + ((i * 5) % 16)) + 'px;background:var(--cor-cobertura-' + faixa + ');opacity:' + (1 - Math.min(1, (i * 9) / 180) * 0.55).toFixed(2)
+          }))
+        };
+      })
+    };
+  }
+
+  componentDidMount() {
+    this.aoRedimensionar = () => this.desenhar();
+    window.addEventListener('resize', this.aoRedimensionar);
+    this.desenhar();
+  }
+
+  componentWillUnmount() { window.removeEventListener('resize', this.aoRedimensionar); }
+
+  componentDidUpdate() { this.desenhar(); }
+
+  desenhar() {
+    const c = this.canvas;
+    if (!c || !c.parentElement) return;
+    const larg = Math.max(360, c.parentElement.clientWidth), alt = 300;
+    const dpr = window.devicePixelRatio || 1;
+    c.width = larg * dpr; c.height = alt * dpr;
+    c.style.width = larg + 'px'; c.style.height = alt + 'px';
+    const g = c.getContext('2d');
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, larg, alt);
+    const cs = getComputedStyle(c);
+    const cor = (n) => (cs.getPropertyValue(n) || '').trim() || '#888';
+    const esq = 46, dir = 54, topo = 16, base = alt - 30;
+    const passo = (larg - esq - dir) / 18;
+    const sel = this.state.mes == null ? 12 : this.state.mes;
+    const vmax = 440, imin = 4.0, imax = 5.7;
+    const yv = (v) => base - (v / vmax) * (base - topo);
+    const yi = (v) => base - ((v - imin) / (imax - imin)) * (base - topo);
+
+    g.strokeStyle = cor('--cor-borda'); g.lineWidth = 1;
+    for (let k = 0; k <= 4; k++) {
+      const y = Math.round(topo + ((base - topo) / 4) * k) + 0.5;
+      g.beginPath(); g.moveTo(esq, y); g.lineTo(larg - dir, y); g.stroke();
+    }
+    g.fillStyle = cor('--cor-superficie-sutil');
+    g.fillRect(esq + passo * sel, topo, passo, base - topo);
+
+    g.fillStyle = cor('--cor-cobertura-3');
+    this.VOL.forEach((v, i) => {
+      const x = esq + passo * i + passo * 0.28, w = passo * 0.44;
+      g.globalAlpha = i === sel ? 1 : 0.62;
+      g.fillRect(x, yv(v), w, base - yv(v));
+    });
+    g.globalAlpha = 1;
+
+    g.strokeStyle = cor('--cor-texto-primario'); g.lineWidth = 1.75;
+    g.beginPath();
+    this.IPCA.forEach((v, i) => {
+      const x = esq + passo * i + passo / 2;
+      if (i === 0) g.moveTo(x, yi(v)); else g.lineTo(x, yi(v));
+    });
+    g.stroke();
+    this.IPCA.forEach((v, i) => {
+      const x = esq + passo * i + passo / 2;
+      g.beginPath(); g.arc(x, yi(v), i === sel ? 4 : 2.2, 0, Math.PI * 2);
+      g.fillStyle = i === sel ? cor('--cor-acento') : cor('--cor-texto-primario');
+      g.fill();
+      if (i === sel) { g.strokeStyle = cor('--cor-superficie'); g.lineWidth = 1.5; g.stroke(); }
+    });
+
+    g.font = '10px "IBM Plex Mono", monospace';
+    g.fillStyle = cor('--cor-texto-terciario');
+    g.textAlign = 'right';
+    for (let k = 0; k <= 4; k++) {
+      const val = imax - ((imax - imin) / 4) * k;
+      g.fillText(val.toFixed(1).replace('.', ',') + '%', esq - 8, topo + ((base - topo) / 4) * k + 3);
+    }
+    g.textAlign = 'left';
+    for (let k = 0; k <= 4; k++) {
+      const val = vmax - (vmax / 4) * k;
+      g.fillText(String(Math.round(val)), larg - dir + 8, topo + ((base - topo) / 4) * k + 3);
+    }
+    g.textAlign = 'center';
+    this.MESES.forEach((m, i) => {
+      if (i % 2 !== 0 && i !== sel) return;
+      g.fillStyle = i === sel ? cor('--cor-texto-primario') : cor('--cor-texto-terciario');
+      g.fillText(m, esq + passo * i + passo / 2, base + 16);
+    });
+  }
+}
+</script>
+</body>
+</html>
