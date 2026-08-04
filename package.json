@@ -16,7 +16,8 @@
     "db:migrar": "node-pg-migrate up --envPath .env -m libs/persistence/migrations -j ts --migrations-table migracoes --check-order --verbose",
     "db:reverter": "node-pg-migrate down --envPath .env -m libs/persistence/migrations -j ts --migrations-table migracoes --verbose",
     "db:migracao:nova": "node-pg-migrate create --envPath .env -m libs/persistence/migrations -j ts",
-    "verificar:fronteiras": "node tools/verificar-fronteiras.mjs"
+    "verificar:fronteiras": "node tools/verificar-fronteiras.mjs",
+    "verificar:hnsw": "node tools/verificar-indice-hnsw.mjs"
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~2.6.0",
@@ -91,6 +92,7 @@
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@noble/hashes": "^2.2.0",
     "express": "^4.21.2",
     "pg": "^8.22.0",
     "reflect-metadata": "^0.2.0",

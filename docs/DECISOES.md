@@ -6,6 +6,133 @@ o `CONTEXTO.md` não previu.
 
 ---
 
+## ADR-018 — `.gitattributes` com `eol=lf`, e `design/**` como binário
+
+- **Contexto.** No meio da Onda 1, `prettier --check` reprovou 117 arquivos,
+  incluindo `tsconfig.base.json`, que eu não havia tocado. Causa: o git no
+  Windows converteu a árvore de trabalho para CRLF. Três consequências reais, não
+  estéticas: o `prettier --check` deixou de ser sinal; `.husky/pre-push` com CRLF
+  quebra sob `sh` no Linux com "bad interpreter"; e `design/Mirante.dc.html`
+  cresceu 1.759 bytes (um `\r` por linha), passando de 164.806 para 166.565 bytes
+  e invalidando o SHA-256 registrado no `DESIGN_SYSTEM.md` §1 — que é a única
+  coisa que aquele documento existe para garantir.
+- **Opções.** Pôr `endOfLine: "auto"` no Prettier e conviver; `.gitattributes`
+  com `eol=lf` para tudo; `.gitattributes` com `eol=lf` mais `-text` no `design/`.
+- **Escolha.** A terceira. `eol=lf` global torna a árvore determinística
+  independente do `core.autocrlf` da máquina, e `design/** -text` faz o git nunca
+  tocar nos bytes da especificação, porque ali o hash é o contrato. `endOfLine:
+"auto"` só silenciaria o alarme, deixando o hook e o hash quebrados.
+- **Custo aceito.** Arquivos já rastreados precisam de
+  `git add --renormalize .` uma vez para o `.gitattributes` valer sobre eles, e
+  isso produz um commit grande só de fim de linha. Os arquivos de `design/` foram
+  reextraídos da fonte e voltaram ao hash registrado.
+- **Data.** 2026-08-04
+
+---
+
+## ADR-012 — `veiculos_distintos` conta domínio, não fonte
+
+- **Contexto.** InfoMoney Mercados e InfoMoney Economia são duas linhas em
+  `fonte` com o mesmo `dominio`. O `CONTEXTO.md` diz "doze veículos distintos o
+  cobriram" e trata isso como o melhor sinal de relevância sem editor humano.
+- **Opções.** Contar `fonte_id` distinto; contar `fonte.dominio` distinto.
+- **Escolha.** Domínio. Duas seções do mesmo veículo cobrindo o mesmo fato são um
+  veículo — contar duas infla exatamente o número em que o produto se apoia, e o
+  inflaria mais para as fontes de maior volume, que são as que têm mais seções.
+- **Custo aceito.** `dominio` não pode ser único em `fonte`, e a contagem exige
+  `count(distinct f.dominio)` com join, não um `count` na própria `item`. A query
+  e o índice que a sustenta entram na Onda 5, junto com o recálculo de score.
+- **Data.** 2026-08-03
+
+---
+
+## ADR-013 — Âncora temporal do decaimento: `ultimo_visto_em`
+
+- **Contexto.** A fórmula de ranking usa `exp(-Δt_horas / TAU)`, e o
+  `CONTEXTO.md` não diz de qual timestamp o Δt conta. `cluster` tem
+  `primeiro_visto_em` e `ultimo_visto_em`.
+- **Opções.** `primeiro_visto_em` (idade do fato); `ultimo_visto_em` (tempo desde
+  a última cobertura nova).
+- **Escolha.** `ultimo_visto_em`, exposto como `ancoraTemporal` na configuração
+  injetada em vez de embutido. A pergunta que a tela responde é "o que está
+  mexendo agora", e um fato que segue rendendo matéria está mexendo agora.
+- **Custo aceito.** Um fato antigo que recebe uma matéria nova volta ao topo.
+  Isso é desejado para desdobramento real e indesejado para republicação
+  tardia — a dedup aproximada é quem tem de barrar o segundo caso. **Pendente de
+  confirmação humana**; trocar é uma linha na configuração.
+- **Data.** 2026-08-03
+
+---
+
+## ADR-014 — `@noble/hashes` para sha256 em `libs/domain`
+
+- **Contexto.** `hashUrl` e `simhash` precisam de sha256. `libs/domain` é
+  `type:util`, TS puro, e pode ser importada por `libs/ui` (Angular), logo o
+  código tem de rodar em Node e no browser. O aceite da Onda 1 permite
+  "utilitários puros" em `dependencies`.
+- **Opções.** `node:crypto`; Web Crypto (`crypto.subtle`); sha256 escrito à mão;
+  `@noble/hashes`.
+- **Escolha.** `@noble/hashes` 2.2.0. `node:crypto` quebra bundle de browser;
+  Web Crypto é assíncrona e contaminaria de `Promise` um pipeline que é síncrono;
+  sha256 à mão é código de criptografia sem auditoria. `@noble/hashes` é puro,
+  síncrono, isomórfico, auditado e sem dependência transitiva.
+- **Custo aceito.** Uma dependência de runtime em `libs/domain`, declarada no
+  `package.json` da lib e vigiada por `@nx/dependency-checks`. Import só resolve
+  com extensão (`@noble/hashes/sha2.js`).
+- **Data.** 2026-08-03
+
+---
+
+## ADR-015 — SimHash guardado como `bigint` assinado
+
+- **Contexto.** O schema canônico diz `simhash bigint`. `bigint` no Postgres é
+  int8 **assinado**; o SimHash usa os 64 bits, então metade dos valores
+  possíveis não cabe.
+- **Opções.** Trocar a coluna para `numeric` ou `bytea`; converter para a faixa
+  assinada na fronteira de persistência.
+- **Escolha.** Converter, com `paraBigintAssinado` e `paraSimhashSemSinal` em
+  `libs/domain`. O schema canônico está fechado e `bigint` é o tipo certo para
+  comparação de bits; trocar a coluna resolveria o sintoma criando um tipo pior.
+- **Custo aceito.** Toda escrita e leitura de `simhash` tem de passar pela
+  conversão. Sem ela a inserção falharia com "value out of range" em cerca de
+  metade dos itens, de forma intermitente — o pior jeito de descobrir. Há teste
+  provando que a distância de Hamming é idêntica nas duas representações.
+- **Data.** 2026-08-03
+
+---
+
+## ADR-016 — Chave primária de `cluster_entidade`
+
+- **Contexto.** O `CONTEXTO.md` seção 4 lista `cluster_entidade` sem chave
+  primária.
+- **Opções.** `id` sintético; chave natural `(cluster_id, tipo, valor)`; sem
+  chave.
+- **Escolha.** `(cluster_id, tipo, valor)`. Impede a mesma entidade entrar duas
+  vezes no mesmo cluster quando o enriquecimento da Onda 8 reprocessa, o que é
+  justamente o caso que o cache por `enrich_hash` não cobre.
+- **Custo aceito.** `confianca` não entra na chave, então reprocessar com
+  confiança diferente exige `ON CONFLICT ... DO UPDATE`, não um insert cego.
+- **Data.** 2026-08-03
+
+---
+
+## ADR-017 — `down` vazio só para extensão; schema reverte de verdade
+
+- **Contexto.** O `ADR-006` deixou `down` vazio na migração de extensão. A
+  migração do schema canônico cria oito enums e seis tabelas, e a Onda 1 exige
+  "migração sobe e reverte limpa".
+- **Opções.** `down` vazio também no schema, por simetria; `down` completo.
+- **Escolha.** `down` completo, derrubando em ordem inversa. A proibição de
+  migração destrutiva do `CLAUDE.md` seção 1 é sobre perda de dado como efeito
+  colateral de outra mudança, não sobre reversão deliberada disparada pelo humano
+  com `npm run db:reverter`. `DROP EXTENSION vector` era diferente porque
+  cascateia sobre objeto que a migração não criou.
+- **Custo aceito.** `npm run db:reverter` no schema apaga todo dado coletado.
+  Verificado: sobe, reverte deixando só `migracoes`, e sobe de novo limpo.
+- **Data.** 2026-08-03
+
+---
+
 ## ADR-001 — Ferramenta de migração: `node-pg-migrate`
 
 - **Contexto.** A Onda 0 exige ferramenta de migração escolhida, e o `CLAUDE.md`

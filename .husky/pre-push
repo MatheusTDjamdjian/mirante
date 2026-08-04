@@ -6,6 +6,9 @@
 # hook passar verde sem ter rodado nada, o projeto perde a sua unica rede de
 # protecao — por isso a base de comparacao tem fallback explicito em vez de
 # deixar o `nx affected` resolver um conjunto vazio em silencio.
+#
+# Este arquivo tem de terminar linha com LF. Com CRLF, `sh` no Linux falha com
+# "bad interpreter". Garantido pelo .gitattributes.
 
 set -e
 
