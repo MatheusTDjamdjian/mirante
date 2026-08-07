@@ -6,6 +6,9 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
+    "@mirante/domain": "0.0.1",
+    "kysely": "^0.29.4",
+    "pg": "^8.22.0",
     "tslib": "^2.3.0"
   }
 }

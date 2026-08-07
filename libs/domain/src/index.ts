@@ -7,6 +7,7 @@
 
 export * from './lib/enums';
 export * from './lib/tipos';
+export * from './lib/coleta';
 
 export * from './lib/url';
 export * from './lib/titulo';
