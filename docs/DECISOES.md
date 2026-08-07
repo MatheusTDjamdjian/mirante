@@ -6,6 +6,49 @@ o `CONTEXTO.md` não previu.
 
 ---
 
+## ADR-019 — Fonte da Onda 2: feed do site com filtro por seção
+
+- **Contexto.** O `CONTEXTO.md` §2 documenta `https://www.infomoney.com.br/mercados/feed`
+  para a fatia vertical. Verificado: devolve `200` com envelope RSS **válido e
+  vazio**, zero itens, 1.335 bytes — nas duas formas, com e sem barra final. A
+  categoria `/mercados/` existe (página HTML retorna 200); só o feed dela está
+  vazio. O feed do site (`/feed/`) devolve 10 itens com `pubDate`.
+- **Opções.** Manter `/mercados/feed` e aceitar zero itens (bloqueia a onda);
+  usar `/feed/` sem filtrar (ingere política e eleições); usar `/feed/` filtrando
+  por `<category>`.
+- **Escolha.** `/feed/` filtrando por seção editorial de topo — `Mercados`,
+  `Onde Investir`, `Economia`. Medido item por item no feed real: essas três
+  cobrem 8 de 10; os 2 de fora estavam marcados apenas como `Política` (STF e
+  jogos de azar). Uma allowlist só com `Mercados` descartaria o item de PIB e o
+  de Renda Fixa, os dois relevantes para o público do produto.
+- **Custo aceito.** O vocabulário editorial do InfoMoney entra na nossa
+  configuração e pode mudar sem aviso. O filtro erra deliberadamente para o lado
+  de **incluir**: descartar notícia de mercado é irreversível, e ingerir uma
+  notícia política não é — o `tema` da Onda 8 separa ruído, mas nada recupera o
+  que nunca entrou. A Onda 3 revisita a lista com mais dados.
+- **Data.** 2026-08-06
+
+---
+
+## ADR-020 — `content:encoded` nunca é extraído
+
+- **Contexto.** O feed do InfoMoney entrega o **corpo integral** da matéria em
+  `<content:encoded>` — 195 KB dos 205 KB da resposta. O `CONTEXTO.md` §3 proíbe
+  persistir ou processar corpo de matéria.
+- **Opções.** Ler o corpo e usar como insumo de embedding, como o
+  `resumo_origem`; nunca ler o campo.
+- **Escolha.** Nunca ler. O campo está **ausente do esquema Zod** do item, e a
+  ausência é a garantia: não existe variável para alguém usar por engano seis
+  meses depois. As fixtures versionadas têm o campo redigido, o que também evita
+  redistribuir conteúdo de terceiro num repositório público.
+- **Custo aceito.** O clustering da Onda 4 trabalha só com título e
+  `resumo_origem`. Se a precisão não bater os 90% exigidos, a tentação vai ser
+  usar o corpo — e a resposta continua sendo não, porque a restrição jurídica é a
+  arquitetura do sistema, não uma otimização negociável.
+- **Data.** 2026-08-06
+
+---
+
 ## ADR-018 — `.gitattributes` com `eol=lf`, e `design/**` como binário
 
 - **Contexto.** No meio da Onda 1, `prettier --check` reprovou 117 arquivos,
@@ -203,6 +246,24 @@ o `CONTEXTO.md` não previu.
   (`domain`, adaptadores, formatação pt-BR) mora em `libs/*`, ou seja, no lado
   Vitest.
 - **Data.** 2026-07-30
+
+### Emenda — 2026-08-06: Vitest também nos apps Nest
+
+O custo aceito acima estava subestimado, e a Onda 2 mostrou por quê.
+`@noble/hashes` (ADR-014) é ESM-only. Sob Jest com transform CommonJS, **qualquer**
+teste de app que importe `@mirante/domain` falha com
+`Cannot use import statement outside a module` — e um caso de uso de app Nest
+neste projeto importa o domínio em praticamente todo cenário. Não era dois
+formatos de relatório: era uma fronteira ESM/CJS entre os apps e o coração do
+sistema.
+
+`apps/ingestion-worker` passou a usar Vitest, com `vitest.config.mts` escrito à
+mão porque o gerador `@nx/nest:application` só oferece `jest` ou `none`. Os 21
+testes do worker rodam. `apps/api` migra quando tiver teste (hoje não tem).
+
+Custo real trocado: config fora da trilha do gerador do Nx, que pode exigir
+atenção a cada `nx migrate` — em lugar de um bloqueio permanente entre o app e o
+domínio. O primeiro custa atenção pontual; o segundo custaria toda onda.
 
 ---
 

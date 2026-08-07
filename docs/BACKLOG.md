@@ -37,6 +37,33 @@ Os números acima estão fixados como asserção em
 `libs/domain/src/lib/simhash.spec.ts`, então qualquer mudança na normalização
 aparece como teste vermelho antes de virar queda de precisão.
 
+### Onda 3 — o schema fechado não tem onde guardar saúde de fonte
+
+A Onda 3 pede painel com "último sucesso, última falha, taxa de erro" por fonte.
+O schema canônico (`CONTEXTO.md` §4) só tem `fonte.ultima_coleta_em`, e o
+`CLAUDE.md` §1 fecha o schema na Onda 1 — alteração exige ADR.
+
+Hoje o `ciclo-de-coleta.ts` **não** avança `ultima_coleta_em` quando a coleta
+falha, justamente para preservar a distinção entre "consultei e não mudou" e "não
+consegui consultar". Mas isso só registra o último sucesso; falha e taxa de erro
+não têm onde morar.
+
+Duas saídas, e a escolha é do humano na abertura da Onda 3: migração com ADR
+adicionando `ultima_falha_em` e contadores, ou manter em Redis, que já está no
+projeto e onde métrica volátil pertence. A segunda não polui o schema canônico
+com dado operacional; a primeira sobrevive a um flush do Redis.
+
+### Onda 4 — item com `titulo_normalizado` vazio tem simhash `0n`
+
+Título composto só de stopwords normaliza para string vazia, e `simhash('')` é
+`0n`. Dois itens sem relação cujos títulos normalizem para vazio teriam distância
+de Hamming 0 e seriam lidos como duplicata.
+
+O item continua sendo gravado, e corretamente — `url_hash` deduplica. Mas a query
+de dedup aproximada da Onda 4 precisa excluir `titulo_normalizado = ''`, senão
+agrupa lixo. Documentado no contrato de `normalizarTitulo`, e o teste de
+`simhash('')` fixa o comportamento.
+
 ### Onda 5 — índice para a contagem de veículos distintos
 
 `veiculos_distintos` conta `fonte.dominio` distinto (ADR-012), o que exige join

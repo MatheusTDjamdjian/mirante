@@ -1,0 +1,22 @@
+[
+  {
+    "arquivo": "infomoney-com-itens.xml",
+    "url": "https://www.infomoney.com.br/feed/",
+    "status": 200,
+    "contentType": "application/rss+xml; charset=UTF-8",
+    "etag": "W/\"3702e0640fb3d09e5993b2f662b08bbe\"",
+    "lastModified": "Thu, 06 Aug 2026 14:28:31 GMT",
+    "itens": 10,
+    "bytes": 10759
+  },
+  {
+    "arquivo": "infomoney-mercados-vazio.xml",
+    "url": "https://www.infomoney.com.br/mercados/feed/",
+    "status": 200,
+    "contentType": "application/rss+xml; charset=UTF-8",
+    "etag": "W/\"aaf720e528f2749f04d82862c754b6a4\"",
+    "lastModified": "Thu, 06 Aug 2026 14:29:43 GMT",
+    "itens": 0,
+    "bytes": 1307
+  }
+]

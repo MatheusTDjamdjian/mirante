@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Resposta malformada, escrita a mao.
+
+  Reproduz o que uma fonte quebrada devolve na pratica: resposta que comeca como
+  XML, tem tag nao fechada e termina truncada no meio de um item. O adaptador tem
+  de devolver falha tipada de categoria `formato` e nao lancar excecao.
+-->
+<rss version="2.0">
+<channel>
+  <title>Feed truncado</title>
+  <link>https://exemplo.invalid/</link>
+  <item>
+    <title>Item que nunca fecha
+    <link>https://exemplo.invalid/a</link>
+    <pubDate>Thu, 06 Aug 2026 14:00:00 +0000</pubDate>
+  </item>
+  <item>
+    <title>Segundo item, cortado no meio

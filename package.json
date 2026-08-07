@@ -17,7 +17,9 @@
     "db:reverter": "node-pg-migrate down --envPath .env -m libs/persistence/migrations -j ts --migrations-table migracoes --verbose",
     "db:migracao:nova": "node-pg-migrate create --envPath .env -m libs/persistence/migrations -j ts",
     "verificar:fronteiras": "node tools/verificar-fronteiras.mjs",
-    "verificar:hnsw": "node tools/verificar-indice-hnsw.mjs"
+    "verificar:hnsw": "node tools/verificar-indice-hnsw.mjs",
+    "coletar:uma-vez": "nx build ingestion-worker && node --env-file=.env dist/apps/ingestion-worker/main.js --uma-vez",
+    "worker": "nx build ingestion-worker && node --env-file=.env dist/apps/ingestion-worker/main.js"
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~2.6.0",
@@ -93,9 +95,15 @@
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
     "@noble/hashes": "^2.2.0",
+    "bullmq": "^6.0.7",
     "express": "^4.21.2",
+    "fast-xml-parser": "^5.10.1",
+    "ioredis": "^6.0.0",
+    "kysely": "^0.29.4",
     "pg": "^8.22.0",
+    "pino": "^10.3.1",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "~7.8.0"
+    "rxjs": "~7.8.0",
+    "zod": "^4.4.3"
   }
 }

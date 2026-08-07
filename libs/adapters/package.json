@@ -6,6 +6,9 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "@mirante/domain": "0.0.1",
+    "fast-xml-parser": "^5.10.1",
+    "tslib": "^2.3.0",
+    "zod": "^4.4.3"
   }
 }
