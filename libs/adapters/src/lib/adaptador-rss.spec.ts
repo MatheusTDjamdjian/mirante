@@ -192,6 +192,85 @@ describe('AdaptadorRss — filtro por categoria', () => {
   });
 });
 
+describe('AdaptadorRss — teto de idade', () => {
+  // Guarda contra feed abandonado. O rss.xml da Agencia Brasil devolve
+  // Last-Modified de hoje e itens de 2020; sem este teto, seis anos de materia
+  // entram no banco sem nada no log indicando problema. Ver ADR-022.
+  const AGORA = new Date('2026-08-10T12:00:00.000Z');
+
+  const feedCom = (pubDate: string): string =>
+    `<?xml version="1.0"?><rss version="2.0"><channel><title>c</title>
+      <item><title>Item</title><link>https://x.com/a</link>
+        <pubDate>${pubDate}</pubDate></item>
+    </channel></rss>`;
+
+  it('discards an item from an abandoned feed', async () => {
+    const adaptador = new AdaptadorRss(CONFIG, {
+      agora: () => AGORA,
+      buscar: async () => resposta(feedCom('Sat, 20 Jun 2020 15:00:00 -0300')),
+    });
+
+    const r = await adaptador.coletar(ESTADO_DE_COLETA_VAZIO);
+    if (r.tipo !== 'coletado') throw new Error('esperava coletado');
+    expect(r.itens).toHaveLength(0);
+    expect(r.descartados[0]?.motivo).toBe('muito-antigo');
+    expect(r.descartados[0]?.detalhe).toContain('dias');
+  });
+
+  it('keeps an item within the default 30-day window', async () => {
+    const adaptador = new AdaptadorRss(CONFIG, {
+      agora: () => AGORA,
+      buscar: async () => resposta(feedCom('Mon, 03 Aug 2026 12:00:00 +0000')),
+    });
+
+    const r = await adaptador.coletar(ESTADO_DE_COLETA_VAZIO);
+    if (r.tipo !== 'coletado') throw new Error('esperava coletado');
+    expect(r.itens).toHaveLength(1);
+  });
+
+  it('keeps a two-week-old item, because feed depth is normal', async () => {
+    // Medido: Investing Cambio traz itens com mais de 7 dias. O teto pega o caso
+    // patologico, nao a profundidade normal de um feed.
+    const adaptador = new AdaptadorRss(CONFIG, {
+      agora: () => AGORA,
+      buscar: async () => resposta(feedCom('Mon, 27 Jul 2026 12:00:00 +0000')),
+    });
+
+    const r = await adaptador.coletar(ESTADO_DE_COLETA_VAZIO);
+    if (r.tipo !== 'coletado') throw new Error('esperava coletado');
+    expect(r.itens).toHaveLength(1);
+  });
+
+  it('honours a tighter per-source ceiling', async () => {
+    const adaptador = new AdaptadorRss(
+      { ...CONFIG, idadeMaximaDias: 2 },
+      {
+        agora: () => AGORA,
+        buscar: async () =>
+          resposta(feedCom('Wed, 05 Aug 2026 12:00:00 +0000')),
+      },
+    );
+
+    const r = await adaptador.coletar(ESTADO_DE_COLETA_VAZIO);
+    if (r.tipo !== 'coletado') throw new Error('esperava coletado');
+    expect(r.itens).toHaveLength(0);
+    expect(r.descartados[0]?.motivo).toBe('muito-antigo');
+  });
+
+  it('does not discard an item published in the future', async () => {
+    // Data no futuro e outro problema, tratado pelo piso de idade no ranking.
+    // Aqui nao pode virar 'muito-antigo', que seria diagnostico errado.
+    const adaptador = new AdaptadorRss(CONFIG, {
+      agora: () => AGORA,
+      buscar: async () => resposta(feedCom('Tue, 11 Aug 2026 12:00:00 +0000')),
+    });
+
+    const r = await adaptador.coletar(ESTADO_DE_COLETA_VAZIO);
+    if (r.tipo !== 'coletado') throw new Error('esperava coletado');
+    expect(r.itens).toHaveLength(1);
+  });
+});
+
 describe('AdaptadorRss — corpo de materia', () => {
   // CONTEXTO.md secao 3: o Mirante nunca persiste nem processa corpo de materia.
   // O feed do InfoMoney entrega o corpo em <content:encoded>; a garantia e que o

@@ -56,6 +56,21 @@ export class FonteRepositorio {
       .executeTakeFirst();
   }
 
+  /**
+   * Desativa a fonte, preservando os itens ja coletados.
+   *
+   * `ativa = false` e nao `DELETE`: item coletado e dado, e o `CLAUDE.md` secao 1
+   * proibe perda de dado sem confirmacao humana. Fonte desativada para de ser
+   * consultada e continua explicando de onde os itens antigos vieram.
+   */
+  async desativar(id: string): Promise<void> {
+    await this.db
+      .updateTable('fonte')
+      .set({ ativa: false })
+      .where('id', '=', id)
+      .execute();
+  }
+
   /** Estado de cache condicional para a proxima requisicao desta fonte. */
   async estadoDeColeta(id: string): Promise<EstadoDeColeta> {
     const linha = await this.db

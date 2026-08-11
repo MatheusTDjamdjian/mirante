@@ -22,6 +22,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { Circuito, lerRetryAfter, type ConfiguracaoCircuito } from './circuito';
 import type {
   AdaptadorFonte,
+  BuscadorHttp,
   FalhaDeColeta,
   ResultadoColeta,
 } from './contrato';
@@ -43,16 +44,22 @@ export interface ConfiguracaoRss {
    * A comparacao ignora acento e caixa: `Ações` casa com `acoes`.
    */
   readonly categoriasPermitidas?: readonly string[];
+  /**
+   * Teto de idade do item, em dias. Default 30.
+   *
+   * Feed abandonado nao avisa que esta abandonado. O `rss.xml` da Agencia Brasil
+   * devolve `Last-Modified` de hoje e dez itens de 2020 — sem este teto, seis
+   * anos de materia entram no banco sem que nada no log indique problema.
+   *
+   * 30 dias e generoso de proposito: feed legitimo carrega item de uma ou duas
+   * semanas (medido: Investing Cambio tinha tres itens com mais de 7 dias). O
+   * teto pega o caso patologico, nao a profundidade normal de um feed.
+   */
+  readonly idadeMaximaDias?: number;
   readonly timeoutMs?: number;
   readonly userAgent?: string;
   readonly circuito?: ConfiguracaoCircuito;
 }
-
-/** Injetavel para o teste rodar contra fixture em disco, sem rede. */
-export type BuscadorHttp = (
-  url: string,
-  init: RequestInit,
-) => Promise<Response>;
 
 export interface DependenciasRss {
   readonly buscar?: BuscadorHttp;
@@ -62,6 +69,8 @@ export interface DependenciasRss {
 }
 
 const TIMEOUT_PADRAO_MS = 10_000;
+const IDADE_MAXIMA_PADRAO_DIAS = 30;
+const MS_POR_DIA = 86_400_000;
 const USER_AGENT_PADRAO =
   'Mirante/0.1 (+https://github.com/MatheusTDjamdjian/mirante)';
 
@@ -338,6 +347,20 @@ export class AdaptadorRss implements AdaptadorFonte {
     }
 
     const publicadoEm = interpretarData(pubDate);
+    if (publicadoEm !== null) {
+      const idadeDias =
+        (this.agora().getTime() - publicadoEm.getTime()) / MS_POR_DIA;
+      const teto =
+        this.configuracao.idadeMaximaDias ?? IDADE_MAXIMA_PADRAO_DIAS;
+      if (idadeDias > teto) {
+        return {
+          descartado: {
+            motivo: 'muito-antigo',
+            detalhe: `${titulo.slice(0, 60)} (publicado ha ${Math.round(idadeDias)} dias, teto ${teto})`,
+          },
+        };
+      }
+    }
     if (publicadoEm === null) {
       // Descarta em vez de assumir `now()`: `publicado_em` alimenta o
       // decaimento temporal do ranking, e chutar a data premiaria justamente o

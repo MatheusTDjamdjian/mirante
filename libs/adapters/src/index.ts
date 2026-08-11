@@ -8,3 +8,5 @@ export * from './lib/contrato';
 export * from './lib/circuito';
 export * from './lib/rss-esquema';
 export * from './lib/adaptador-rss';
+export * from './lib/gdelt-esquema';
+export * from './lib/adaptador-gdelt';

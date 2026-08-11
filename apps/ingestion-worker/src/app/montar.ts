@@ -44,7 +44,21 @@ export function montar(): Aplicacao {
   };
 }
 
-/** Idempotente: roda a cada boot sem duplicar fonte. */
+/**
+ * Sincroniza a tabela `fonte` com o catalogo. Idempotente.
+ *
+ * Duas direcoes:
+ *
+ *   catalogo -> banco   fonte nova e inserida
+ *   banco -> catalogo   fonte ativa que saiu do catalogo e **desativada**
+ *
+ * A segunda direcao existe por experiencia concreta: quando a URL da Agencia
+ * Brasil foi corrigida (ADR-022), a linha antiga ficou orfa no banco e passou a
+ * produzir `FonteSemCatalogoError` em todo ciclo. Erro que repete a cada ciclo e
+ * ruido, e ruido esconde o erro seguinte.
+ *
+ * Desativa, nao apaga: os itens ja coletados continuam explicaveis.
+ */
 export async function semear(app: Aplicacao): Promise<void> {
   const repositorio = new FonteRepositorio(app.conexao.db);
 
@@ -53,6 +67,19 @@ export async function semear(app: Aplicacao): Promise<void> {
     app.logger.info(
       { fonte_id: id, fonte_nome: fonte.nome, criada },
       criada ? 'fonte semeada' : 'fonte ja existia',
+    );
+  }
+
+  const noCatalogo = new Set(
+    FONTES_PARA_SEMEAR.map((f) => `${f.dominio}|${f.nome}`),
+  );
+
+  for (const fonte of await repositorio.buscarAtivas()) {
+    if (noCatalogo.has(`${fonte.dominio}|${fonte.nome}`)) continue;
+    await repositorio.desativar(fonte.id);
+    app.logger.warn(
+      { fonte_id: fonte.id, fonte_nome: fonte.nome, dominio: fonte.dominio },
+      'fonte ativa fora do catalogo: desativada, itens preservados',
     );
   }
 }

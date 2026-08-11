@@ -5,18 +5,33 @@
 //
 // A idempotencia deste job nao vem de um flag: vem de `url_hash` unico e da
 // requisicao condicional. Rodar o mesmo job duas vezes coleta os mesmos itens e
-// grava zero — o que e exatamente o criterio de aceite central da onda.
+// grava zero.
+//
+// **Dois agendamentos, nao um.** Os feeds de noticia rodam a cada 5 min; o GDELT,
+// a cada 30. Motivo medido: o GDELT permite uma requisicao a cada 5 s, e seis
+// consultas tematicas espacadas consomem ~33 s — na cadencia do RSS ele sozinho
+// dominaria o orcamento de 90 s do ciclo, para trazer quase nada de novo numa
+// janela movel de tres meses. Ver ADR-026.
 
 import { Queue, Worker, type Job } from 'bullmq';
 import IORedis from 'ioredis';
-import { executarCiclo, type ResumoDoCiclo } from './ciclo-unico';
+import {
+  executarCiclo,
+  TIPOS_GDELT,
+  TIPOS_RSS,
+  type ResumoDoCiclo,
+} from './ciclo-unico';
 import type { Aplicacao } from './montar';
 
 export const NOME_DA_FILA = 'coleta';
-export const NOME_DO_JOB = 'coletar-fonte';
 
-/** Job repetido: um id fixo impede duplicar o agendamento a cada boot. */
-const ID_DO_AGENDAMENTO = 'ciclo-periodico';
+/** Um nome de job por cadencia. O `data` do job carrega o recorte. */
+export const JOB_RSS = 'coletar-rss';
+export const JOB_GDELT = 'coletar-gdelt';
+
+interface DadosDoJob {
+  readonly recorte: 'rss' | 'gdelt';
+}
 
 export interface FilaDeColeta {
   readonly fila: Queue;
@@ -49,26 +64,39 @@ export async function iniciarFila(app: Aplicacao): Promise<FilaDeColeta> {
     },
   });
 
+  // Id fixo por agendamento: impede duplicar o agendamento a cada boot.
   await fila.upsertJobScheduler(
-    ID_DO_AGENDAMENTO,
+    'ciclo-rss',
     { every: app.configuracao.INTERVALO_COLETA_MS },
-    { name: NOME_DO_JOB, data: {} },
+    { name: JOB_RSS, data: { recorte: 'rss' } satisfies DadosDoJob },
   );
 
-  const worker = new Worker<unknown, ResumoDoCiclo>(
+  await fila.upsertJobScheduler(
+    'ciclo-gdelt',
+    { every: app.configuracao.INTERVALO_GDELT_MS },
+    { name: JOB_GDELT, data: { recorte: 'gdelt' } satisfies DadosDoJob },
+  );
+
+  const worker = new Worker<DadosDoJob, ResumoDoCiclo>(
     NOME_DA_FILA,
-    async (job: Job) => {
+    async (job: Job<DadosDoJob>) => {
       const log = app.logger.child({
         job_id: job.id,
+        job_nome: job.name,
         tentativa: job.attemptsMade + 1,
       });
       log.debug('job iniciado');
-      return executarCiclo(app);
+
+      return job.data.recorte === 'gdelt'
+        ? executarCiclo(app, { tipos: TIPOS_GDELT, rotulo: 'gdelt' })
+        : executarCiclo(app, { tipos: TIPOS_RSS, rotulo: 'rss' });
     },
     {
       connection: conexaoWorker,
-      // Uma coleta por vez: duas coletas simultaneas da mesma fonte gastariam
-      // requisicao para gravar zero, e aumentariam o risco de 429.
+      // Uma coleta por vez, mesmo com dois agendamentos: um ciclo de RSS e um de
+      // GDELT simultaneos competiriam pelo pool do Postgres, e foi estouro de
+      // `connectionTimeoutMillis` que derrubou um ciclo inteiro na Onda 3
+      // (ADR-025).
       concurrency: 1,
     },
   );
@@ -78,6 +106,7 @@ export async function iniciarFila(app: Aplicacao): Promise<FilaDeColeta> {
     app.logger.error(
       {
         job_id: job?.id,
+        job_nome: job?.name,
         tentativa: job?.attemptsMade,
         dead_letter: esgotou,
         motivo: erro.message,
@@ -93,7 +122,8 @@ export async function iniciarFila(app: Aplicacao): Promise<FilaDeColeta> {
   app.logger.info(
     {
       fila: NOME_DA_FILA,
-      intervalo_ms: app.configuracao.INTERVALO_COLETA_MS,
+      intervalo_rss_ms: app.configuracao.INTERVALO_COLETA_MS,
+      intervalo_gdelt_ms: app.configuracao.INTERVALO_GDELT_MS,
     },
     'fila de coleta iniciada',
   );
