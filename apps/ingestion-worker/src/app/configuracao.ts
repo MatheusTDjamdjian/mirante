@@ -33,6 +33,21 @@ const Ambiente = z.object({
    */
   INTERVALO_COLETA_MS: z.coerce.number().int().positive().default(300_000),
 
+  /**
+   * Intervalo entre ciclos do GDELT, separado do intervalo dos feeds RSS.
+   *
+   * Default 30 minutos, seis vezes o intervalo do RSS. Dois motivos medidos:
+   *
+   * 1. A janela do GDELT e movel de tres meses e a granularidade e de 15 min.
+   *    Consulta-lo na cadencia de um feed de noticia traz quase nada de novo.
+   * 2. Ele permite uma requisicao a cada 5 s, e seis consultas tematicas
+   *    espacadas consomem ~33 s. Na cadencia do RSS, o GDELT sozinho dominaria
+   *    o orcamento de 90 s do ciclo (CONTEXTO.md secao 9).
+   *
+   * Ver ADR-026.
+   */
+  INTERVALO_GDELT_MS: z.coerce.number().int().positive().default(1_800_000),
+
   /** Timeout de uma requisicao a uma fonte. */
   TIMEOUT_FONTE_MS: z.coerce.number().int().positive().default(10_000),
 

@@ -37,6 +37,27 @@ Os números acima estão fixados como asserção em
 `libs/domain/src/lib/simhash.spec.ts`, então qualquer mudança na normalização
 aparece como teste vermelho antes de virar queda de precisão.
 
+### Adiado pelo humano — painel de saúde por fonte
+
+Entregável da Onda 3 ("último sucesso, última falha, taxa de erro"), **adiado por
+decisão do humano em 2026-08-10** para depois. Não é lacuna esquecida.
+
+O desenho já está decidido (ver seção seguinte): Redis, não schema. O que falta é
+implementar:
+
+- chave `saude:fonte:<id>` com hash de `ultimo_sucesso_em`, `ultima_falha_em`,
+  `ultima_falha_categoria`, `estado_circuito`;
+- taxa de erro por lista limitada — `LPUSH` do resultado de cada ciclo e
+  `LTRIM 0 49`, então a taxa é falhas sobre os últimos 50 ciclos. Janela real, sem
+  aritmética de bucket de tempo e sem contador que precisa de reset;
+- TTL de 7 dias, para chave de fonte removida expirar sozinha;
+- exposição: `npm run fontes:saude` agora, endpoint HTTP na Onda 5 consumindo o
+  mesmo repositório — construir estrutura do `apps/api` antes da Onda 5 seria
+  retrabalho.
+
+O `CicloDeColeta` já produz `MetricaDeColeta` com tudo que o painel precisa; o que
+falta é escrever no Redis e ler de volta.
+
 ### Onda 3 — o schema fechado não tem onde guardar saúde de fonte
 
 A Onda 3 pede painel com "último sucesso, última falha, taxa de erro" por fonte.

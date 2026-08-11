@@ -6,6 +6,180 @@ o `CONTEXTO.md` não previu.
 
 ---
 
+## ADR-027 — A fábrica reutiliza a instância do adaptador, por causa do breaker
+
+- **Contexto.** `FabricaDeAdaptadores.criar()` devolvia instância nova a cada
+  chamada, e `coletarFonte` chama a fábrica em todo ciclo. O `Circuito` vive na
+  instância, então ele nascia `fechado` sempre e protegia apenas **dentro** de um
+  ciclo — entre as seis consultas do GDELT. O aceite da Onda 3 exige mais: "GDELT
+  devolvendo 429 abre o circuito, **e o ciclo seguinte não tenta antes do
+  Retry-After**".
+- **Como apareceu.** Medindo, não lendo. O teste do breaker passava porque chamava
+  `coletar` duas vezes no mesmo objeto — provava a classe, não o sistema. O log de
+  um ciclo real mostrou `circuitos_abertos: 0` onde deveria haver 1.
+- **Opções.** Mover o breaker para fora do adaptador; guardar estado do breaker no
+  Redis; memoizar a instância por `fonte.id`.
+- **Escolha.** Memoizar por `fonte.id`. O adaptador é sem estado exceto pelo
+  breaker, e o breaker é exatamente o estado que precisa sobreviver. Uma instância
+  por fonte, não uma compartilhada: circuito de uma fonte não pode calar outra.
+- **Custo aceito.** Reinício do processo zera o breaker. Estado durável entre
+  reinícios exigiria Redis — mesmo lugar do painel de saúde, anotado no
+  `BACKLOG.md` e não resolvido aqui.
+- **Verificado.** Worker em modo serviço, três ciclos no mesmo processo:
+  46.638 ms com `falhas: 1` → **31 ms** com `circuitos_abertos: 1` (não tentou) →
+  15.525 ms em meio-aberto, com **uma** sondagem em vez de três.
+- **Data.** 2026-08-10
+
+---
+
+## ADR-026 — Cadência própria do GDELT, e o balanço br / global
+
+- **Contexto.** O GDELT permite **uma requisição a cada 5 segundos** — medido, é
+  o que o corpo do próprio `429` diz. Seis consultas temáticas espaçadas consomem
+  ~33 s. Na cadência dos feeds RSS (5 min), o GDELT sozinho consumiria um terço do
+  orçamento de 90 s do ciclo (`CONTEXTO.md` §9) para trazer quase nada de novo,
+  numa janela móvel de três meses com granularidade de 15 minutos.
+- **Opções.** Cadência única para tudo; cadência por fonte; cadência por tipo.
+- **Escolha.** Por tipo, com dois agendamentos BullMQ: `ciclo-rss` a cada 5 min
+  cobrindo `rss` e `oficial`, e `ciclo-gdelt` a cada 30 min cobrindo `gdelt`.
+  `concurrency: 1` mantido no worker: dois ciclos simultâneos competiriam pelo
+  pool do Postgres, e foi estouro de `connectionTimeoutMillis` que derrubou um
+  ciclo inteiro nesta mesma onda (ADR-025).
+- **Custo aceito.** Cadência por _tipo_ e não por _fonte_. Se uma fonte RSS
+  específica precisar de ritmo próprio, isso exige generalizar o agendamento —
+  não previsto agora, e não inventado antes de precisar.
+- **Data.** 2026-08-10
+
+### O balanço, que a cadência não resolve sozinha
+
+Seis consultas com o `maxrecords` no teto de 250 trariam até 1.500 artigos por
+ciclo, contra ~20 itens novos dos seis feeds RSS. O feed viraria cobertura
+estrangeira com um apêndice brasileiro, e o público do produto é investidor pessoa
+física brasileiro (`CONTEXTO.md` §1).
+
+`maxrecords: 20` por consulta é o ponto de partida — até 120 artigos por ciclo de
+30 min. **É número de partida, não medição.** `npm run estado:banco` reporta a
+razão br:global e avisa quando a cobertura global passa a brasileira, para a
+calibração ser com dado.
+
+### O que fica aberto, e é seu
+
+Cadência e `maxrecords` controlam **quanto entra**. Não controlam **o que sobe**, e
+é aí que o desequilíbrio real aparece. A fórmula do `CONTEXTO.md` §6 não tem termo
+de região:
+
+```
+score = max(peso_base) × log2(1 + veiculos_distintos) × exp(-Δt/TAU) × (1 + boost)
+```
+
+Copom coberto por 5 veículos brasileiros dá `log2(6) ≈ 2,58`. Fed coberto por 40
+veículos estrangeiros dá `log2(41) ≈ 5,36`. **O fato global ganha por
+construção, sempre.**
+
+Isso é decisão de produto, a fórmula está fechada no `CONTEXTO.md`, e mexer nela
+exige ADR. A onda certa é a 5, quando o ranking entra. Registrado aqui para não
+chegar lá como surpresa.
+
+---
+
+## ADR-025 — Falha de banco numa fonte não derruba o ciclo
+
+- **Contexto.** Numa execução real, o pool do Postgres estourou
+  `connectionTimeoutMillis` durante um ciclo. A exceção subiu de `coletarFonte`
+  até o `main`, que logou `fatal` e chamou `process.exit(1)` — enquanto os outros
+  grupos de domínio ainda estavam em vôo. Um deles logou coleta bem-sucedida
+  **depois** do log de aborto. Ciclo pela metade, escrita parcial.
+- **Opções.** Aumentar o timeout do pool e esperar que não repita; tratar só no
+  `main`; fechar a garantia na origem.
+- **Escolha.** Duas mudanças. `coletarFonte` passa a **nunca lançar** — falha de
+  banco vira métrica de `falha`, exatamente como o contrato do adaptador já fazia
+  com falha de rede. E `executarCiclo` usa `Promise.allSettled` em vez de
+  `Promise.all`, porque `all` rejeita na primeira falha e abandona os outros
+  grupos rodando.
+- **Custo aceito.** A métrica de falha inesperada não sabe o nome da fonte
+  (`(desconhecida)`), porque o erro pode ter acontecido antes de conseguir lê-la.
+  Aumentar o timeout do pool não foi feito: o defeito era a propagação, não os 5 s,
+  e mascarar com timeout maior deixaria a fragilidade de pé.
+- **Data.** 2026-08-10
+
+---
+
+## ADR-021 — Três correções ao `CONTEXTO.md` §2, verificadas contra a fonte
+
+- **Contexto.** A Onda 3 multiplica o contrato do adaptador por cinco fontes. Toda
+  URL foi verificada antes de entrar no catálogo, e três contradizem o documento.
+- **Achados.** (1) `InfoMoney Economia` não existe: `/economia/feed/` devolve os
+  mesmos 1.311 bytes vazios de `/mercados/feed` — **todas** as categorias do
+  InfoMoney estão desativadas, então há uma fonte e não duas. (2) Os feeds do
+  Investing.com não estão em `br.investing.com/webmaster-tools/rss`; essa é a
+  página de índice, e os endereços reais são `br.investing.com/rss/<nome>.rss`.
+  (3) O caminho das agências da EBC não é `/feed`: na Agência Brasil devolve HTML,
+  na Agência Gov é 404.
+- **Escolha.** Catálogo com seis fontes RSS, cada URL verificada. Os feeds
+  `commodities.rss` e `bonds.rss` do Investing existem e funcionam, mas ficam de
+  fora porque o `CONTEXTO.md` pediu três — ações, câmbio e macro.
+- **Custo aceito.** O `CONTEXTO.md` §2 fica desatualizado até você corrigi-lo. O
+  documento diz que a tabela é "ponto de partida, não autorização", então a
+  divergência está prevista — mas quem lê o documento primeiro vai se confundir.
+- **Data.** 2026-08-10
+
+---
+
+## ADR-022 — Teto de idade por item, e o feed abandonado que o motivou
+
+- **Contexto.** `agenciabrasil.ebc.com.br/rss.xml` devolve `200`, RSS 2.0 válido,
+  `Last-Modified` de hoje — e dez itens de abril a junho de **2020**. Sem
+  `lastBuildDate`. Seis anos de matéria entraram no banco e nada no log indicou
+  problema; o defeito só apareceu ao olhar `min(publicado_em)`.
+- **Opções.** Descartar a fonte; manter e conviver; achar o feed vivo; adicionar
+  teto de idade por item.
+- **Escolha.** As duas últimas. O feed vivo saiu do próprio site — a página
+  aponta para `rss.ebc.com.br`, que redireciona para um índice de feeds por
+  seção, e `rss/economia/feed.xml` traz dez itens do dia, com ETag, com
+  `<category>` de qualidade (`inflação`, `IPCA`, `taxa Selic`) e sem corpo de
+  matéria. E o `AdaptadorRss` passou a ter `idadeMaximaDias`, default 30,
+  descartando com motivo `muito-antigo`.
+- **Custo aceito.** 30 dias é generoso e não pega feed levemente atrasado —
+  medido, o Investing Câmbio traz itens com mais de 7 dias legitimamente. O teto
+  serve para o caso patológico. Item mais antigo que o teto é descartado em
+  silêncio exceto pela contagem no log, que é o lugar certo.
+- **Data.** 2026-08-10
+
+---
+
+## ADR-023 — Ciclo paralelo por domínio, sequencial dentro do domínio
+
+- **Contexto.** O teto do `CONTEXTO.md` §9 é 90 s para o ciclo completo, e
+  sequencial não escala com seis fontes. Mas as três fontes do Investing.com
+  compartilham `br.investing.com`.
+- **Opções.** Sequencial; paralelo por fonte; paralelo por domínio.
+- **Escolha.** Paralelo por domínio, sequencial dentro dele. Disparar três
+  requisições simultâneas contra o mesmo host é o comportamento que rende `429` —
+  e nesta mesma onda eu provei o custo disso na prática: cinco requisições em
+  rajada contra o GDELT derrubaram o acesso por rede, com `connect timeout` que
+  durou mais de 90 s.
+- **Custo aceito.** Um domínio com muitas fontes vira o caminho crítico do ciclo.
+  Medido com seis fontes em quatro domínios: **1.996 ms**, contra teto de 90.000.
+- **Data.** 2026-08-10
+
+---
+
+## ADR-024 — Fonte fora do catálogo é desativada, não apagada
+
+- **Contexto.** Ao corrigir a URL da Agência Brasil (ADR-022), a linha antiga
+  ficou órfã no banco e passou a produzir `FonteSemCatalogoError` em todo ciclo.
+- **Opções.** Apagar a linha; deixar o erro repetir; desativar automaticamente.
+- **Escolha.** O seed sincroniza nas duas direções: fonte nova do catálogo é
+  inserida, e fonte ativa que saiu do catálogo é **desativada**, com log de
+  `warn`. Erro que repete a cada ciclo é ruído, e ruído esconde o erro seguinte.
+- **Custo aceito.** `ativa = false` e não `DELETE`, porque item coletado é dado e
+  o `CLAUDE.md` §1 proíbe perda de dado sem confirmação. Consequência: remover uma
+  entrada do catálogo por engano desativa a fonte em silêncio — mitigado pelo log
+  de `warn`, não eliminado.
+- **Data.** 2026-08-10
+
+---
+
 ## ADR-019 — Fonte da Onda 2: feed do site com filtro por seção
 
 - **Contexto.** O `CONTEXTO.md` §2 documenta `https://www.infomoney.com.br/mercados/feed`

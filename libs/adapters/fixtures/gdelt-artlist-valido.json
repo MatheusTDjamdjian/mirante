@@ -1,0 +1,95 @@
+{
+  "_procedencia": "RECONSTRUIDA a partir de campos verificados em 2026-08-07, NAO capturada. Ver LEIA-ME.md.",
+  "articles": [
+    {
+      "url": "https://economictimes.indiatimes.com/news/international/world-news/central-bank-holds-rates/articleshow/1.cms",
+      "url_mobile": "",
+      "title": "Central bank holds rates as inflation cools further",
+      "seendate": "20260807T181500Z",
+      "socialimage": "https://img.etimg.com/photo/1.jpg",
+      "domain": "economictimes.indiatimes.com",
+      "language": "English",
+      "sourcecountry": "India"
+    },
+    {
+      "url": "https://www.lanacion.com.ar/economia/el-banco-central-mantuvo-la-tasa-nid07082026/",
+      "url_mobile": "",
+      "title": "El banco central mantuvo la tasa de interes sin cambios",
+      "seendate": "20260807T174500Z",
+      "socialimage": "",
+      "domain": "lanacion.com.ar",
+      "language": "Spanish",
+      "sourcecountry": "Argentina"
+    },
+    {
+      "url": "https://valor.globo.com/financas/noticia/2026/08/07/copom-mantem-selic.ghtml",
+      "url_mobile": "",
+      "title": "Copom mantem Selic e sinaliza cautela com inflacao",
+      "seendate": "20260807T170000Z",
+      "socialimage": "",
+      "domain": "valor.globo.com",
+      "language": "Portuguese",
+      "sourcecountry": "Brazil"
+    },
+    {
+      "url": "https://www.hankyung.com/article/2026080712345",
+      "url_mobile": "",
+      "title": "Bank of Korea signals pause on rate cuts",
+      "seendate": "20260807T163000Z",
+      "socialimage": "",
+      "domain": "hankyung.com",
+      "language": "Korean",
+      "sourcecountry": "South Korea"
+    },
+    {
+      "url": "https://www.reuters.com/markets/tariff-talks-stall-2026-08-07/",
+      "url_mobile": "",
+      "title": "Tariff talks stall as trade war concerns mount",
+      "seendate": "20260807T160000Z",
+      "socialimage": "",
+      "domain": "reuters.com",
+      "language": "English",
+      "sourcecountry": "United States"
+    },
+    {
+      "url": "https://www.example-unmapped.kz/news/1",
+      "url_mobile": "",
+      "title": "Commodity exporters brace for weaker demand",
+      "seendate": "20260807T155000Z",
+      "socialimage": "",
+      "domain": "example-unmapped.kz",
+      "language": "Kazakh",
+      "sourcecountry": "Kazakhstan"
+    },
+    {
+      "url": "",
+      "url_mobile": "",
+      "title": "Artigo sem URL, deve ser descartado",
+      "seendate": "20260807T154000Z",
+      "socialimage": "",
+      "domain": "sem-url.invalid",
+      "language": "English",
+      "sourcecountry": "United States"
+    },
+    {
+      "url": "https://www.example.com/sem-titulo",
+      "url_mobile": "",
+      "title": "",
+      "seendate": "20260807T153000Z",
+      "socialimage": "",
+      "domain": "example.com",
+      "language": "English",
+      "sourcecountry": "United States"
+    },
+    {
+      "url": "https://www.example.com/seendate-torto",
+      "url_mobile": "",
+      "title": "Artigo com seendate em formato invalido",
+      "seendate": "07/08/2026 15:20",
+      "socialimage": "",
+      "domain": "example.com",
+      "language": "English",
+      "sourcecountry": "United States"
+    }
+  ]
+}

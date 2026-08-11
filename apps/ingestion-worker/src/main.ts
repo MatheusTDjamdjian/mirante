@@ -15,9 +15,26 @@
 // Sem `await` de topo: o webpack do @nx/nest emite CommonJS, e top-level await
 // exige saida ESM. A funcao `principal` existe por isso, nao por estilo.
 
-import { executarCiclo } from './app/ciclo-unico';
+import type { TipoDeFonte } from '@mirante/domain';
+import { executarCiclo, TIPOS_GDELT, TIPOS_RSS } from './app/ciclo-unico';
 import { iniciarFila } from './app/fila';
 import { montar, semear } from './app/montar';
+
+/**
+ * `--recorte=rss` ou `--recorte=gdelt`, so com `--uma-vez`.
+ *
+ * Existe para medir cada cadencia separadamente: o teto de 90s do CONTEXTO.md
+ * secao 9 vale por ciclo, e os dois ciclos tem custo muito diferente — o do GDELT
+ * e dominado pelo espacamento de 5,5s entre consultas.
+ */
+function lerRecorte(): { tipos?: readonly TipoDeFonte[]; rotulo?: string } {
+  const argumento = process.argv.find((a) => a.startsWith('--recorte='));
+  const valor = argumento?.split('=')[1];
+
+  if (valor === 'rss') return { tipos: TIPOS_RSS, rotulo: 'rss' };
+  if (valor === 'gdelt') return { tipos: TIPOS_GDELT, rotulo: 'gdelt' };
+  return {};
+}
 
 async function principal(): Promise<void> {
   const umaVez = process.argv.includes('--uma-vez');
@@ -27,7 +44,7 @@ async function principal(): Promise<void> {
     await semear(app);
 
     if (umaVez) {
-      await executarCiclo(app);
+      await executarCiclo(app, lerRecorte());
       await app.encerrar();
       process.exit(0);
     }

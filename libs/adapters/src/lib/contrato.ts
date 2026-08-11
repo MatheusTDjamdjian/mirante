@@ -55,6 +55,18 @@ export interface AdaptadorFonte {
   coletar(estado: EstadoDeColeta): Promise<ResultadoColeta>;
 }
 
+/**
+ * Costura de HTTP, injetavel.
+ *
+ * Definida aqui e nao em cada adaptador: a forma e a mesma, e duas declaracoes
+ * iguais em modulos diferentes tornam o barril ambiguo. Existe para o teste rodar
+ * contra fixture em disco, sem rede.
+ */
+export type BuscadorHttp = (
+  url: string,
+  init: RequestInit,
+) => Promise<Response>;
+
 /** Metrica de um ciclo de uma fonte. Vira log estruturado no worker. */
 export interface MetricaDeColeta {
   readonly fonte_id: string;

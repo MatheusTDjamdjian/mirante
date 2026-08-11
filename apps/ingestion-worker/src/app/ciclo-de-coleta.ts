@@ -40,7 +40,45 @@ export class CicloDeColeta {
     return new FonteRepositorio(this.conexao.db).buscarAtivas();
   }
 
+  /**
+   * Coleta uma fonte. **Nunca lanca.**
+   *
+   * Mesma garantia que o contrato do adaptador da (`coletar` devolve variante de
+   * falha em vez de excecao), agora estendida ao banco. Motivo concreto: numa
+   * execucao real o pool do Postgres estourou `connectionTimeoutMillis` e a
+   * excecao subiu ate o `main`, que abortou o processo — enquanto os outros
+   * grupos de dominio ainda estavam em voo, e um deles logou sucesso **depois**
+   * do log de aborto.
+   *
+   * Falha de banco numa fonte nao e diferente de falha de rede numa fonte: as
+   * outras cinco tem de terminar.
+   */
   async coletarFonte(
+    fonteId: string,
+    cicloId: string,
+  ): Promise<MetricaDeColeta> {
+    try {
+      return await this.tentarColetarFonte(fonteId, cicloId);
+    } catch (erro) {
+      const motivo = erro instanceof Error ? erro.message : String(erro);
+      this.logger.error(
+        { ciclo_id: cicloId, fonte_id: fonteId, motivo },
+        'falha inesperada na coleta',
+      );
+      return {
+        fonte_id: fonteId,
+        fonte_nome: '(desconhecida)',
+        resultado: 'falha',
+        coletados: 0,
+        novos: 0,
+        duplicados: 0,
+        descartados: 0,
+        duracao_ms: 0,
+      };
+    }
+  }
+
+  private async tentarColetarFonte(
     fonteId: string,
     cicloId: string,
   ): Promise<MetricaDeColeta> {

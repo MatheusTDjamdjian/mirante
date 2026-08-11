@@ -56,7 +56,15 @@ export type MotivoDeDescarte =
    * Fonte publica mais que mercado, e o item nao caiu em nenhuma secao de
    * interesse. Filtro grosseiro de proposito — ver ADR-019.
    */
-  | 'categoria-fora-do-escopo';
+  | 'categoria-fora-do-escopo'
+  /**
+   * Item publicado ha mais tempo que o teto configurado para a fonte.
+   *
+   * Existe porque feed abandonado nao anuncia que esta abandonado: o `rss.xml`
+   * da Agencia Brasil devolve `Last-Modified` de hoje e conteudo de 2020, e sem
+   * este guarda seis anos de materia entraram no banco em silencio. Ver ADR-022.
+   */
+  | 'muito-antigo';
 
 export interface ItemDescartado {
   readonly motivo: MotivoDeDescarte;
